@@ -40,8 +40,6 @@ def download(URL, path):
 		
 		os.remove(out_file)
 
-		print(yt.title + " has been successfully downloaded.")
-
 		downloadedM.append(yt.title)
 	except Exception as e:
 		print(e)
@@ -62,13 +60,9 @@ def search(name):
 	search = driver.find_element_by_id("search")
 	time.sleep(2)
 	search.send_keys(name)
-	print("Wrote")
 	time.sleep(2)
 	return_button = driver.find_element_by_id("search-icon-legacy")
 	return_button.click()
-	#search.send_keys(Keys.RETURN)
-	print("Returned")
-
 	try:
 	    first_result = WebDriverWait(driver, 15).until(
 	        EC.presence_of_element_located((By.ID, "title-wrapper"))
@@ -115,6 +109,7 @@ class MainApp:
 		self.master = master
 		self.master.title('Music Player')
 		self.master.configure(background='gray')
+		self.master.iconbitmap('./images/music-logo.ico')
 
 		pygame.mixer.init()
 
@@ -215,6 +210,7 @@ class PlaylistOptions(MainApp):
 		self.screen = Toplevel()
 		self.screen.title('Configuration')
 		self.screen.geometry('500x350')
+		self.screen.iconbitmap('./images/music-logo.ico')
 
 		self.tabs = ttk.Notebook(self.screen)
 		self.tabs.pack(pady=5, padx=0)
@@ -310,7 +306,6 @@ class PlaylistOptions(MainApp):
 
 	def choose(self, value):
 		self.mToEdit = musics(str(value))
-		print(self.mToEdit)
 		self.boxE.selection_clear(0, END)
 		for music in self.mToEdit:
 			self.pos = app.m.index(music[:-1])
