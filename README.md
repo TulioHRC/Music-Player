@@ -9,4 +9,7 @@ Cool Features (simple but cool):
 
 Just 4 fun.
 
-![Sem título](https://user-images.githubusercontent.com/62257920/121219047-afae1c80-c859-11eb-9812-68340aeb9fa8.png)
+Example using:
+
+![Sem título](https://user-images.githubusercontent.com/62257920/121348602-ec801f00-c8fe-11eb-8b5b-e20eb9993cdf.png)![Sem título2](https://user-images.githubusercontent.com/62257920/121348613-f013a600-c8fe-11eb-9492-48916603dc57.png)
+
