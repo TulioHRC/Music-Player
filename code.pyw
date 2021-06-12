@@ -111,7 +111,7 @@ class MainApp:
 		self.master.configure(background='gray')
 		self.master.iconbitmap('./images/music-logo.ico')
 
-		pygame.mixer.init()
+		pygame.mixer.init(48000, -16, 1, 1024)
 
 		self.play = self.clicked = 0 
 		self.r = IntVar() # random var
