@@ -19,3 +19,4 @@ Possibly upgrades:
 - Menu to delete musics
 - Prettier config menu
 - Remove Loops that are making the sound bad, or other solution (Maybe try in another PC, because in mine other app has this little breakes that are making the sound bad)
+- Download isn't working without the console
