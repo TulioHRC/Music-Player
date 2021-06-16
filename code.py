@@ -218,26 +218,29 @@ class PlaylistOptions(MainApp):
 
 		self.screen = Toplevel()
 		self.screen.title('Configuration')
-		self.screen.geometry('500x350')
+		#self.screen.geometry('500x350')
 		self.screen.iconbitmap('./images/music-logo.ico')
 
 		self.tabs = ttk.Notebook(self.screen)
-		self.tabs.pack(pady=5, padx=0)
+		self.tabs.pack()# (pady=5, padx=0)
 
-		self.cFrame = Frame(self.tabs, width=450, height=400, bg='red')
-		self.editFrame = Frame(self.tabs, width=450, height=400, bg='yellow')
-		self.delFrame = Frame(self.tabs, width=450, height=400, bg='blue')
-		self.downloadF = Frame(self.tabs, width=450, height=400, bg='gray')
+		self.cFrame = Frame(self.tabs, width=450, height=300, bg='red')
+		self.editFrame = Frame(self.tabs, width=450, height=300, bg='yellow')
+		self.delFrame = Frame(self.tabs, width=450, height=300, bg='blue')
+		self.downloadF = Frame(self.tabs, width=450, height=300, bg='gray')
+		self.linkF = Frame(self.tabs, width=450, height=300, bg='gray')
 
 		self.cFrame.pack(fill='both', expand=True)
 		self.editFrame.pack(fill='both', expand=True)
 		self.delFrame.pack(fill='both', expand=True)
 		self.downloadF.pack(fill='both', expand=True)
+		self.linkF.pack(fill='both', expand=True)
 
 		self.tabs.add(self.cFrame, text="Create")
 		self.tabs.add(self.editFrame, text="Edit")
 		self.tabs.add(self.delFrame, text="Delete")
 		self.tabs.add(self.downloadF, text="Auto Download Musics")
+		self.tabs.add(self.linkF, text="URL Download Musics")
 
 		self.ms = musics()
 
@@ -291,10 +294,19 @@ class PlaylistOptions(MainApp):
 		Button(self.downloadF, text="Add", command=self.addM).grid(row=3, column=4)
 
 		self.videos = []
-		self.boxD = Listbox(self.downloadF, height=10, width=25, selectmode=MULTIPLE, font="size=30")
-		self.boxD.grid(row=4, column=0, columnspan=2, padx=25, pady=5)
+		self.boxD = Listbox(self.downloadF, height=10, width=40, selectmode=MULTIPLE, font="size=30")
+		self.boxD.grid(row=4, column=0, columnspan=3, padx=25, pady=5)
 
 		Button(self.downloadF, text="Download", command=self.startDown).grid(row=4, column = 4)
+	
+	# Link frame
+		Label(self.linkF, text='', bg='gray').grid(row=0, column=0)
+		Label(self.linkF, text="Link download musics", bg="#B3B3B3", fg="white").grid(row=1, column=1)
+
+		Label(self.linkF, text="URL of the music: ", bg="#B3B3B3", fg="white").grid(row=3, column=0, padx=5)
+		self.url = Entry(self.linkF, width=50)
+		self.url.grid(row=3, column=1, columnspan=2, padx=2, pady=2)
+		Button(self.linkF, text="Download", command=lambda: self.startDown(self.url.get())).grid(row=3, column=4)
 		
 
 	def create(self, name, box):
@@ -333,8 +345,11 @@ class PlaylistOptions(MainApp):
 		self.videos.append(music)
 		self.name.delete(0, 'end')
 
-	def startDown(self):
-		go(self.videos, r".\musics")
+	def startDown(self, url=""):
+		if url:
+			download(url, r".\musics")
+		else:
+			go(self.videos, r".\musics")
 		self.screen.destroy()
 		app.master.destroy()
 		startfile(sys.argv[0])
