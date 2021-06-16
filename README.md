@@ -14,8 +14,5 @@ Example using:
 ![Sem título](https://user-images.githubusercontent.com/62257920/121348602-ec801f00-c8fe-11eb-8b5b-e20eb9993cdf.png)![Sem título2](https://user-images.githubusercontent.com/62257920/121348613-f013a600-c8fe-11eb-9492-48916603dc57.png)
 
 Possibly upgrades:
-- Remove unecessary files on the repository
 - Menu to delete musics
-- Prettier config menu
 - Organize functions in others files
-- Link option to download
