@@ -150,25 +150,25 @@ class MainApp:
 		self.scaleV.set(self.v)
 
 	def start(self):
-		self.add = self.playingMusic = self.box.get(ACTIVE)
-		if self.add[-1] == '\n':
-			self.add = self.add[:-1]
-		self.play = 1
-		self.playB["text"] = SymPause
-		self.playB["command"] = self.stop
-		if (len(self.add)-4) < 20:
-			self.aM['text'] = self.add
+		if self.playingMusic == self.box.get(ACTIVE):
+			self.play = 1
+			self.playB["text"] = SymPause
+			self.playB["command"] = self.stop
+			pygame.mixer.music.unpause()
 		else:
-			self.aM['text'] = self.add[:20] + '...'
-		pygame.mixer.music.load(f"./musics/{self.add}.mp3")
-		pygame.mixer.music.play(loops=0)
-		self.check()
-	
-	def resume(self):
-		self.play = 1
-		self.playB["text"] = SymPause
-		self.playB["command"] = self.stop
-		pygame.mixer.music.unpause()
+			self.add = self.playingMusic = self.box.get(ACTIVE)
+			if self.add[-1] == '\n':
+				self.add = self.add[:-1]
+			self.play = 1
+			self.playB["text"] = SymPause
+			self.playB["command"] = self.stop
+			if (len(self.add)-4) < 20:
+				self.aM['text'] = self.add
+			else:
+				self.aM['text'] = self.add[:20] + '...'
+			pygame.mixer.music.load(f"./musics/{self.add}.mp3")
+			pygame.mixer.music.play(loops=0)
+			self.check()
 
 	def check(self):
 		if pygame.mixer.music.get_busy() == 0 and self.play == 1:
@@ -180,7 +180,7 @@ class MainApp:
 		self.play = 0
 		pygame.mixer.music.pause()
 		self.playB["text"] = SymPlay
-		self.playB["command"] = self.resume
+		self.playB["command"] = self.start
 
 	def changeM(self, factor):
 		self.add = self.playingMusic
