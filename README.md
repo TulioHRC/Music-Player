@@ -17,3 +17,4 @@ Possibly upgrades:
 - Menu to delete musics
 - Organize functions in others files
 - Remove the console when the program is open
+- Edit isn't working
