@@ -11,10 +11,8 @@ Just 4 fun.
 
 Example using:
 
-![Sem título](https://user-images.githubusercontent.com/62257920/121348602-ec801f00-c8fe-11eb-8b5b-e20eb9993cdf.png)![Sem título2](https://user-images.githubusercontent.com/62257920/121348613-f013a600-c8fe-11eb-9492-48916603dc57.png)
+![Sem título](https://user-images.githubusercontent.com/62257920/121348602-ec801f00-c8fe-11eb-8b5b-e20eb9993cdf.png)![a](https://user-images.githubusercontent.com/62257920/122803486-0fb2b300-d29d-11eb-9349-3e61de3593af.png)
+
 
 Possibly upgrades:
 - Menu to delete musics
-- Organize functions in others files
-- Remove the console when the program is open
-- Edit isn't working
