@@ -1,8 +1,7 @@
 from tkinter import *
 from tkinter import ttk, messagebox
-import os, sys, pygame, html, shutil, time
-from os import listdir, startfile
-from os.path import isfile, join
+import os, sys, pygame, html
+from os import startfile
 from random import randint
 from config import *
 
@@ -176,25 +175,30 @@ class PlaylistOptions(MainApp):
 		# Playlist options
 		self.plays = playlists()
 		self.plays.remove('All')
-		self.playlistToEdit = StringVar()
-		self.OptionsE = OptionMenu(self.editFrame, self.playlistToEdit, *self.plays, command=self.choose)
-		self.OptionsE.grid(row=0, column=3)
+		if len(self.plays) > 0:
+			self.playlistToEdit = StringVar()
+			self.OptionsE = OptionMenu(self.editFrame, self.playlistToEdit, *self.plays, command=self.choose)
+			self.OptionsE.grid(row=0, column=3)
 
-		self.boxE = Listbox(self.editFrame, height=10, width=50, selectmode=MULTIPLE, font="size=30")
-		self.boxE.grid(row=2, column=0, columnspan=5, padx=25)
-		for music in self.ms:
-			self.boxE.insert(END, music)
+			self.boxE = Listbox(self.editFrame, height=10, width=50, selectmode=MULTIPLE, font="size=30")
+			self.boxE.grid(row=2, column=0, columnspan=5, padx=25)
+			for music in self.ms:
+				self.boxE.insert(END, music)
 
-		Label(self.editFrame, text='', bg='yellow').grid(row=3, column=0)
-		Button(self.editFrame, text="Edit", command=lambda: self.create(self.playlistToEdit.get(), self.boxE)).grid(row=4, column=1)
+			Label(self.editFrame, text='', bg='yellow').grid(row=3, column=0)
+			Button(self.editFrame, text="Edit", command=lambda: self.create(self.playlistToEdit.get(), self.boxE)).grid(row=4, column=1)
 
-	# Delete Frame
-		Label(self.delFrame, text='', bg='blue').grid(row=0, column=0)
-		self.playName = StringVar()
-		self.playName.set('All')
-		self.playOptions = OptionMenu(self.delFrame, self.playName, *(playlists()))
-		self.playOptions.grid(row=1, column=2)
-		Button(self.delFrame, text='Delete', command=self.delete).grid(row=2, column=3)
+		# Delete Frame
+			Label(self.delFrame, text='', bg='blue').grid(row=0, column=0)
+			self.playName = StringVar()
+			self.playName.set('All')
+			self.playOptions = OptionMenu(self.delFrame, self.playName, *(playlists()))
+			self.playOptions.grid(row=1, column=2)
+			Button(self.delFrame, text='Delete', command=self.delete).grid(row=2, column=3)
+		else:
+			Label(self.editFrame, text='No playlists found', bg='yellow').grid(row=1, column=1)
+			Label(self.delFrame, text='', bg='blue').grid(row=0, column=0)
+			Label(self.delFrame, text='No playlists found', bg='blue').grid(row=1, column=1)
 
 	# Download frame
 		Label(self.downloadF, text='', bg='gray').grid(row=0, column=0)
