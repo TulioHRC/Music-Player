@@ -16,3 +16,5 @@ Example using:
 
 Possibly upgrades:
 - Menu to delete musics
+- Change the way to convert mp4 to mp3 (Because moviepy don't work to exe)
+- Maybe change the way to play musics (pygame is slow)
