@@ -24,7 +24,10 @@ Example on Older version using:
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
 
-### 1.1.0 (Finding a better way to play musics, not pygame)
+### 1.1.1 (Audio Functions, create all the audio functions that I will use, and test it)
+
+### 1.1.0 (Finding the better way to play musics)
+I selected Pygame.mixer, because of the big community and the great mixer controls.
 
 ### 1.0.0 (Older Version)
 
