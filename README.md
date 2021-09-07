@@ -24,7 +24,12 @@ Example on Older version using:
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
 
+### 1.2 (Menu to use)
+Idea: ![image](https://user-images.githubusercontent.com/62257920/132415811-8c04e126-6a15-45b8-87a6-885a4f2ea8c6.png)
+
+
 ### 1.1.1 (Audio Functions, create all the audio functions that I will use, and test it)
+Created the function to play/unpause, pause and check if the music is playing.
 
 ### 1.1.0 (Finding the better way to play musics)
 I selected Pygame.mixer, because of the big community and the great mixer controls.
