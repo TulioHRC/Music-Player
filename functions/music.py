@@ -5,9 +5,16 @@ import pygame.mixer as mixer # Just Importing the mixer module of pygame, instea
 # Benefits: Easy to code, big community, great mixer controls and good sound
 # Problems: Bugs when the computer is overasked
 
-def playMusic(PATH):
-    musicPlace = PATH
+def playMusic(PATH, unpause):
+    if unpause == 1:
+        mixer.music.unpause()
+    else:
+        mixer.init()
+        mixer.music.load(PATH)
+        mixer.music.play(loops=0)
 
-    mixer.init()
-    mixer.music.load(musicPlace)
-    mixer.music.play(loops=0)
+def pauseMusic():
+    mixer.music.pause()
+
+def checkMusic():
+    return mixer.music.get_busy()
