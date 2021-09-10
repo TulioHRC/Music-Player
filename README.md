@@ -8,8 +8,9 @@ While I was using the older version, I had some problems, like very slow in .exe
 - Playlists (like the older, but prettier)
 - Filter to songs (when new song is added you have the possibility to add some caracteristics, like type, singer, etc. To use that info in a filter)
 
-### Observations
+### Observations and Possible Upgrades
 - There will be two apps, one will be the full version, and the other will be the lite version
+- Function to create buttons more easily
 
 ### Lite version
 This version will be for faster application, will not have downloads, and some others features
@@ -35,4 +36,3 @@ Created the function to play/unpause, pause and check if the music is playing.
 I selected Pygame.mixer, because of the big community and the great mixer controls.
 
 ### 1.0.0 (Older Version)
-
