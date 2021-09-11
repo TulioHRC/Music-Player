@@ -18,3 +18,9 @@ def pauseMusic():
 
 def checkMusic():
     return mixer.music.get_busy()
+
+def volume(value):
+    try:
+        mixer.music.set_volume(int(value)/100)
+    except:
+        print('Volume is trying to change, before the mixer is initialized.')
