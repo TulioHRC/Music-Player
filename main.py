@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from functions import music as audio
+from functions import files as files
 from html import unescape
 
 class MainApp:
@@ -18,6 +19,7 @@ class MainApp:
         self.playing = 0
         self.volume = 50
         self.music = ''
+        self.musicsList = []
 
         # Frames
         self.menu = Frame(self.master)
@@ -37,6 +39,9 @@ class MainApp:
         self.playerConstruct()
 
     def menuConstruct(self, selected="all"):
+        menuSymbol = Label(self.menu, text=unescape("&#9776;"), bg="Black", fg="White", height="1", font=('Arial', 16))
+        menuSymbol.pack(fill="x")
+
         self.all = Button(self.menu, text="All Songs", bg="Black", fg="White", height="1")
         self.all.config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
         self.all.pack(fill="x")
@@ -67,6 +72,17 @@ class MainApp:
         panel.photo = img
         panel.pack()
         panel.place(bordermode=OUTSIDE, anchor="nw", relx=0.0175, rely=0)
+
+        self.musicsList = files.findMusics()
+        self.musicsWidgets = {}
+        y = 0.25
+        for n in range(0, len(self.musicsList)):
+            y += 0.05
+            self.musicsWidgets[f"{self.musicsList[n]}"] = Button(self.stuff, text=self.musicsList[n], font=('Arial', 12),
+                                    command=lambda i=self.musicsList[n]: self.playM(i), bg="Black", fg="White")
+            self.musicsWidgets[f"{self.musicsList[n]}"].pack()
+            self.musicsWidgets[f"{self.musicsList[n]}"].place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.8*0.05)),
+                                width=str(int(self.sizes[0]*0.8*0.8*0.8)), relx=0.05, rely=y)
 
 
     def playerConstruct(self):
@@ -109,17 +125,18 @@ class MainApp:
         if self.playing != 0:
             root.after(1000, self.check)
 
-    def playM(self):
+    def playM(self, path=''):
+        if not path: path = self.music
         try:
             unpause = 0
             self.playing = 1
             # If the music is the same that the one was playing
-            if self.music == r".\musics\_Remake - Lofi music..._70k.mp3": # Put the music selected
+            if self.music == path: # Put the music selected
                 unpause = 1
 
-            audio.playMusic(r".\musics\_Remake - Lofi music..._70k.mp3", unpause)
+            audio.playMusic(f"./musics/{path}.mp3", unpause)
 
-            self.music = r".\musics\_Remake - Lofi music..._70k.mp3" # Put the music selected
+            self.music =path # Put the music selected
 
             # Changing Button and others widgets
             self.play["text"] = unescape(' &#9612;&#9612;')
@@ -142,7 +159,7 @@ class MainApp:
             self.play["command"] = self.playM
             self.play.config(font=('MS Sans Serif', 36))
 
-            self.music = r".\musics\_Remake - Lofi music..._70k.mp3" # Put the music selected
+            #self.music = r".\musics\_Remake - Lofi music..._70k.mp3" # Put the music selected
         except Exception as e:
             messagebox.showerror('Error', f'A error has happened:\n{e}')
 
