@@ -15,17 +15,14 @@ While I was using the older version, I had some problems, like very slow in .exe
 ### Lite version
 This version will be for faster application, will not have downloads, and some others features
 
-
 Just 4 fun.
-
-Example on Older version using:
-
-![Sem título](https://user-images.githubusercontent.com/62257920/121348602-ec801f00-c8fe-11eb-8b5b-e20eb9993cdf.png)![a](https://user-images.githubusercontent.com/62257920/122803486-0fb2b300-d29d-11eb-9349-3e61de3593af.png)
 
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
 
 ### 1.2 (Menu to use)
+![image](https://user-images.githubusercontent.com/62257920/133005711-2b63c00d-448d-4588-908d-58666163d896.png)
+
 I created:
 - The player frame (audio functions), menu frame (playlists) and stuff frame (music list)
 - Advance and before musics
