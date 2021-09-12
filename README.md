@@ -8,8 +8,9 @@ While I was using the older version, I had some problems, like very slow in .exe
 - Playlists (like the older, but prettier)
 - Filter to songs (when new song is added you have the possibility to add some caracteristics, like type, singer, etc. To use that info in a filter)
 
-### Observations
+### Observations and Possible Upgrades
 - There will be two apps, one will be the full version, and the other will be the lite version
+- Function to create buttons more easily
 
 ### Lite version
 This version will be for faster application, will not have downloads, and some others features
@@ -25,7 +26,10 @@ Example on Older version using:
 Remembering that the versions above 1.0.0 will restart all the project
 
 ### 1.2 (Menu to use)
-Idea: ![image](https://user-images.githubusercontent.com/62257920/132415811-8c04e126-6a15-45b8-87a6-885a4f2ea8c6.png)
+I created:
+- The player frame (audio functions), menu frame (playlists) and stuff frame (music list)
+- Advance and before musics
+- Randomize method (perfect working, and tested)
 
 
 ### 1.1.1 (Audio Functions, create all the audio functions that I will use, and test it)
@@ -35,4 +39,3 @@ Created the function to play/unpause, pause and check if the music is playing.
 I selected Pygame.mixer, because of the big community and the great mixer controls.
 
 ### 1.0.0 (Older Version)
-
