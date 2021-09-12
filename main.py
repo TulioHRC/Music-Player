@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 from functions import music as audio
 from functions import files as files
 from html import unescape
+import random
 
 class MainApp:
     def __init__(self, master):
@@ -20,6 +21,8 @@ class MainApp:
         self.volume = 50
         self.music = ''
         self.musicsList = []
+        self.backupList = []
+        self.randomized = 0
 
         # Frames
         self.menu = Frame(self.master)
@@ -92,23 +95,30 @@ class MainApp:
         self.name.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.3)),
                             width=str(int(self.sizes[0]*0.8*0.8*0.4)), relx=0.025, rely=0)
 
-        self.before = Button(self.player, text=unescape('&#9664;&#9664;'), border="0", fg="White")
-        self.before.config(font=('MS Sans Serif', 36), background='#000000')
+        self.before = Button(self.player, text=unescape('&#9664;&#9664;'), border="0", fg="White",
+                                font=('MS Sans Serif', 36), background='#000000', command=lambda: self.change(-1))
         self.before.pack()
         self.before.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.4)),
                             width=str(int(self.sizes[0]*0.8*0.8*0.05)), relx=0.05, rely=0.3)
 
-        self.play = Button(self.player, text=unescape('&#9654;'), command=self.playM, border="0", fg="White")
+        self.play = Button(self.player, text=unescape('&#9654;'), command=lambda: self.playM('', 1), border="0", fg="White")
         self.play.config(font=('MS Sans Serif', 36), background='#000000')
         self.play.pack()
         self.play.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.4)),
                             width=str(int(self.sizes[0]*0.8*0.8*0.05)), relx=0.125, rely=0.3)
 
         self.forward = Button(self.player, text=unescape('&#9654;&#9654;'), border="0", fg="White")
-        self.forward.config(font=('MS Sans Serif', 36), background='#000000')
+        self.forward.config(font=('MS Sans Serif', 36), background='#000000', command=lambda: self.change(1))
         self.forward.pack()
         self.forward.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.4)),
                             width=str(int(self.sizes[0]*0.8*0.8*0.05)), relx=0.2, rely=0.3)
+
+        img = ImageTk.PhotoImage(Image.open(r"./images/shuffle.png").resize((int(self.sizes[0]*0.8*0.8*0.04),
+                                        int(self.sizes[1]*0.8*0.2*0.25)), Image.ANTIALIAS))
+        self.random = Button(self.player, image=img, fg="white", bg="black", border="0", command=self.randomize)
+        self.random.photo = img
+        self.random.pack()
+        self.random.place(bordermode=OUTSIDE, anchor="nw", relx=0.66, rely=0.375)
 
         self.volumeS = Scale(self.player, from_=0, to=100, orient=HORIZONTAL, fg='white', bg='#000000'
                                 , command=audio.volume, variable=self.volume)
@@ -121,12 +131,17 @@ class MainApp:
     def check(self):
         # Check if the music is playing or not (to auto advance to the next music)
         if self.playing == 1 and audio.checkMusic() == 0:
-            print('Nothing playing...') # Put the advance function
+            self.change(1)
         if self.playing != 0:
             root.after(1000, self.check)
 
-    def playM(self, path=''):
-        if not path: path = self.music
+    def playM(self, path='', firstTime=0):
+        if not path:
+            if firstTime==1:
+                path = self.musicsList[0]
+            else:
+                path = self.music
+
         try:
             unpause = 0
             self.playing = 1
@@ -158,10 +173,48 @@ class MainApp:
             self.play["text"] = unescape('&#9654;')
             self.play["command"] = self.playM
             self.play.config(font=('MS Sans Serif', 36))
-
-            #self.music = r".\musics\_Remake - Lofi music..._70k.mp3" # Put the music selected
         except Exception as e:
             messagebox.showerror('Error', f'A error has happened:\n{e}')
+
+    def change(self, factor):
+        try:
+            self.pause()
+            positionNow = self.musicsList.index(self.music) + factor # Next/before Position
+            if(positionNow == len(self.musicsList)):
+                self.playM(self.musicsList[0])
+            elif(positionNow == -1):
+                self.playM(self.musicsList[-1])
+            else:
+                self.playM(self.musicsList[positionNow])
+        except Exception as e:
+            messagebox.showerror('Error', f'A error has happened:\n{e}')
+
+    def randomize(self):
+        # Randomize self.musicsList
+        if self.randomized == 0:
+            self.randomized = 1
+            self.backupList = self.musicsList.copy()
+            random.shuffle(self.musicsList)
+
+            self.random.destroy()
+            img = ImageTk.PhotoImage(Image.open(r"./images/shuffle activated.png").resize((int(self.sizes[0]*0.8*0.8*0.04),
+                                            int(self.sizes[1]*0.8*0.2*0.25)), Image.ANTIALIAS))
+            self.random = Button(self.player, image=img, fg="white", bg="black", border="0", command=self.randomize)
+            self.random.photo = img
+            self.random.pack()
+            self.random.place(bordermode=OUTSIDE, anchor="nw", relx=0.66, rely=0.375)
+        else:
+            self.randomized = 0
+            self.musicsList = self.backupList
+
+            self.random.destroy()
+            img = ImageTk.PhotoImage(Image.open(r"./images/shuffle.png").resize((int(self.sizes[0]*0.8*0.8*0.04),
+                                            int(self.sizes[1]*0.8*0.2*0.25)), Image.ANTIALIAS))
+            self.random = Button(self.player, image=img, fg="white", bg="black", border="0", command=self.randomize)
+            self.random.photo = img
+            self.random.pack()
+            self.random.place(bordermode=OUTSIDE, anchor="nw", relx=0.66, rely=0.375)
+
 
 
 def main():

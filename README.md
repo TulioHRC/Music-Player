@@ -26,7 +26,11 @@ Example on Older version using:
 Remembering that the versions above 1.0.0 will restart all the project
 
 ### 1.2 (Menu to use)
-I created the player frame (audio functions), menu frame (playlists) and stuff frame (music list).
+I created:
+- The player frame (audio functions), menu frame (playlists) and stuff frame (music list)
+- Advance and before musics
+- Randomize method (perfect working, and tested)
+
 
 ### 1.1.1 (Audio Functions, create all the audio functions that I will use, and test it)
 Created the function to play/unpause, pause and check if the music is playing.
