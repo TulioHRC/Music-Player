@@ -3,6 +3,7 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 from functions import music as audio
 from functions import files as files
+from functions.scrollbar import createScrollableFrame
 from html import unescape
 import random
 
@@ -62,10 +63,12 @@ class MainApp:
         # For with the playlists
 
     def stuffConstruct(self): # Will be "reconstructed" many times
-        self.stuff = Frame(self.master)
-        self.stuff.pack()
-        self.stuff.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.8)),
+        self.mainStuff = Frame(self.master)
+        self.mainStuff.pack()
+        self.mainStuff.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.8)),
                             width=str(int(self.sizes[0]*0.8*0.8)), relx=0.2, rely=0)
+
+        self.stuff = createScrollableFrame(self.mainStuff)
         self.stuff.config(background="#353638")
 
         # Image loading
@@ -74,18 +77,14 @@ class MainApp:
         panel = Label(self.stuff, image=img, border="0.1")
         panel.photo = img
         panel.pack()
-        panel.place(bordermode=OUTSIDE, anchor="nw", relx=0.0175, rely=0)
 
         self.musicsList = files.findMusics()
         self.musicsWidgets = {}
-        y = 0.25
         for n in range(0, len(self.musicsList)):
-            y += 0.05
             self.musicsWidgets[f"{self.musicsList[n]}"] = Button(self.stuff, text=self.musicsList[n], font=('Arial', 12),
-                                    command=lambda i=self.musicsList[n]: self.playM(i), bg="Black", fg="White")
+                                    command=lambda i=self.musicsList[n]: self.playM(i), bg="Black", fg="White",
+                                    width=75, height=1)
             self.musicsWidgets[f"{self.musicsList[n]}"].pack()
-            self.musicsWidgets[f"{self.musicsList[n]}"].place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.8*0.05)),
-                                width=str(int(self.sizes[0]*0.8*0.8*0.8)), relx=0.05, rely=y)
 
 
     def playerConstruct(self):
