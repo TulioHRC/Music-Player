@@ -76,15 +76,21 @@ class MainApp:
         img = ImageTk.PhotoImage(Image.open(path).resize((int(self.sizes[0]*0.8*0.75), int(self.sizes[1]*0.8*0.2)), Image.ANTIALIAS))
         panel = Label(self.stuff, image=img, border="0.1")
         panel.photo = img
-        panel.pack()
+        panel.grid(row=0, column=0, columnspan=2, pady=10)
 
         self.musicsList = files.findMusics()
         self.musicsWidgets = {}
         for n in range(0, len(self.musicsList)):
             self.musicsWidgets[f"{self.musicsList[n]}"] = Button(self.stuff, text=self.musicsList[n], font=('Arial', 12),
                                     command=lambda i=self.musicsList[n]: self.playM(i), bg="Black", fg="White",
-                                    width=75, height=1)
-            self.musicsWidgets[f"{self.musicsList[n]}"].pack()
+                                    width=80, height=1)
+            self.musicsWidgets[f"{self.musicsList[n]}"].grid(row=n+1, column=0, padx=10)
+
+            path = r"./images/see more.png"
+            img = ImageTk.PhotoImage(Image.open(path).resize((int(self.sizes[0]*0.8*0.05), int(self.sizes[1]*0.8*0.05)), Image.ANTIALIAS))
+            panel = Button(self.stuff, image=img, border="0.1", command=lambda i=self.musicsList[n]: Edit(i))
+            panel.photo = img
+            panel.grid(row=n+1, column=1, padx=30)
 
 
     def playerConstruct(self):
@@ -145,7 +151,7 @@ class MainApp:
             unpause = 0
             self.playing = 1
             # If the music is the same that the one was playing
-            if self.music == path: # Put the music selected
+            if self.music == path:
                 unpause = 1
 
             audio.playMusic(f"./musics/{path}.mp3", unpause)
@@ -214,6 +220,26 @@ class MainApp:
             self.random.pack()
             self.random.place(bordermode=OUTSIDE, anchor="nw", relx=0.66, rely=0.375)
 
+class Edit(MainApp):
+    def __init__(self, music):
+        self.screen = Toplevel()
+        self.screen.title("Edit")
+        self.screen.grab_set()
+        self.screen.iconbitmap('./images/music-logo.ico')
+        self.screen.geometry(f"{int(app.sizes[0]*0.8*0.2)}x{int(app.sizes[1]*0.8*0.3)}+{int(app.sizes[0]*0.1)}+{int(app.sizes[1]*0.1)}")
+        self.screen.resizable(0,0)
+
+        self.music = music
+
+        self.initFrame()
+
+    def initFrame(self):
+        self.frame = Frame(self.screen)
+        self.frame.pack(fill=BOTH, expand=True)
+
+        Button(self.frame, text="Rename").pack(pady=5, padx=10, fill=X, expand=True)
+        Button(self.frame, text="Delete").pack(pady=5, padx=10, fill=X, expand=True)
+        Button(self.frame, text="Information").pack(pady=5, padx=10, fill=X, expand=True)
 
 
 def main():
