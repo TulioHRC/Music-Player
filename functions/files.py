@@ -1,11 +1,15 @@
-from os import listdir
+import os
 
-def findMusics(playlist=""):
+def findMusics(playlist="", order="char"):
     musics = []
     if not playlist:
-        for m in listdir('./musics/'):
+        for m in os.listdir('./musics/'):
             musics.append(m[:-4]) # Take off extension (.mp4)
 
-    musics.sort(key=lambda v: v.upper())
+    if order == "char":
+        musics.sort(key=lambda v: v.upper())
+    elif order == "date":
+        musics.sort(key=lambda x: os.path.getmtime(f"./musics/{x}.mp3"))
+        musics.reverse()
 
     return musics

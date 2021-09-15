@@ -27,6 +27,8 @@ I created:
 - The player frame (audio functions), menu frame (playlists) and stuff frame (music list)
 - Advance and before musics
 - Randomize method (perfect working, and tested)
+- Keyboard Functions
+- Menu Frame (all, recent, ...)
 
 
 ### 1.1.1 (Audio Functions, create all the audio functions that I will use, and test it)

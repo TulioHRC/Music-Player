@@ -42,27 +42,45 @@ class MainApp:
         self.player.config(background="#000000")
         self.playerConstruct()
 
-    def menuConstruct(self, selected="all"):
+        # Keyboards shortcuts
+        self.master.bind("<space>", self.space)
+
+    def menuConstruct(self):
         menuSymbol = Label(self.menu, text=unescape("&#9776;"), bg="Black", fg="White", height="1", font=('Arial', 16))
         menuSymbol.pack(fill="x")
 
-        self.all = Button(self.menu, text="All Songs", bg="Black", fg="White", height="1")
+        self.all = Button(self.menu, text="All Songs", bg="Black", fg="White", height="1", command=lambda: self.stuffConstruct(order="char", reCreate=1))
         self.all.config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
         self.all.pack(fill="x")
 
-        self.recent = Button(self.menu, text="Recent Added", bg="Black", fg="White", height="1")
+        self.recent = Button(self.menu, text="By Date", bg="Black", fg="White", height="1", command=lambda: self.stuffConstruct(order="date", reCreate=1))
         self.recent.config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
         self.recent.pack(fill="x")
-
-        if selected == "all": self.all.config(bg="Gray")
-        elif selected == "recent": self.recent.config(bg="Gray")
 
         Label(self.menu, text="Playlists", bg="Black", fg="White", height="5", font=('Arial', 20),
                     highlightbackground="White", highlightcolor="White").pack(fill="x")
 
         # For with the playlists
 
-    def stuffConstruct(self): # Will be "reconstructed" many times
+    def stuffConstruct(self, playlist="", order="char", reCreate=""): # Will be "reconstructed" many times
+        if reCreate:
+            try:
+                self.mainStuff.destroy()
+                self.stuff.destroy()
+            except Exception as e:
+                print(e)
+                messagebox.showerror('Error', f"A error has happened:\n{e}")
+
+        if not playlist:
+            if order=="char":
+                self.recent.config(bg="Black")
+                self.all.config(bg="Gray")
+            else:
+                self.recent.config(bg="Gray")
+                self.all.config(bg="Black")
+
+            # Else playlist (put the colors on the playlists List)
+
         self.mainStuff = Frame(self.master)
         self.mainStuff.pack()
         self.mainStuff.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.8)),
@@ -78,7 +96,7 @@ class MainApp:
         panel.photo = img
         panel.grid(row=0, column=0, columnspan=2, pady=10)
 
-        self.musicsList = files.findMusics()
+        self.musicsList = files.findMusics(playlist, order)
         self.musicsWidgets = {}
         for n in range(0, len(self.musicsList)):
             self.musicsWidgets[f"{self.musicsList[n]}"] = Button(self.stuff, text=self.musicsList[n], font=('Arial', 12),
@@ -219,6 +237,9 @@ class MainApp:
             self.random.photo = img
             self.random.pack()
             self.random.place(bordermode=OUTSIDE, anchor="nw", relx=0.66, rely=0.375)
+
+    def space(self, event):
+        self.play.invoke()
 
 class Edit(MainApp):
     def __init__(self, music):
