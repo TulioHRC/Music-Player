@@ -159,6 +159,8 @@ class MainApp:
             root.after(1000, self.check)
 
     def playM(self, path='', firstTime=0):
+        if not self.music:
+            firstTime = 1
         if not path:
             if firstTime==1:
                 path = self.musicsList[0]
@@ -172,7 +174,7 @@ class MainApp:
             if self.music == path:
                 unpause = 1
 
-            audio.playMusic(f"./musics/{path}.mp3", unpause)
+            audio.playMusic(f"./musics/{path}.mp3", unpause, firstTime)
 
             self.music =path # Put the music selected
 
@@ -183,7 +185,10 @@ class MainApp:
 
             self.name["text"] = self.music
 
-            self.check() # Starts the loop of checking
+            if firstTime:
+                audio.volume(self.volumeS.get())
+
+            root.after(1000, self.check) # Starts the loop of checking
         except Exception as e:
             messagebox.showerror('Error', f"A error has happened:\n{e}")
 

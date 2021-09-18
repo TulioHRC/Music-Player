@@ -29,6 +29,7 @@ I created:
 - Randomize method (perfect working, and tested)
 - Keyboard Functions
 - Menu Frame (all, recent, ...)
+- Changed the music module, (tkinter -> VLC) Because of the size of tkinter, is much bigger than VLC module, and VLC don't bugs in my pc, like Tkinter.
 
 
 ### 1.1.1 (Audio Functions, create all the audio functions that I will use, and test it)
