@@ -22,7 +22,6 @@ def checkMusic():
     return music.is_playing()
 
 def volume(value):
-    print(value)
     try:
         music.audio_set_volume(int(value))
     except Exception as e:

@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 from functions import music as audio
 from functions import files as files
 from functions.scrollbar import createScrollableFrame
+from functions import playlists as playlist
 from html import unescape
 import random
 
@@ -22,6 +23,7 @@ class MainApp:
         self.volume = 50
         self.music = ''
         self.musicsList = []
+        self.playlists = playlist.loadPlaylists()
         self.backupList = []
         self.randomized = 0
 
@@ -60,7 +62,18 @@ class MainApp:
         Label(self.menu, text="Playlists", bg="Black", fg="White", height="5", font=('Arial', 20),
                     highlightbackground="White", highlightcolor="White").pack(fill="x")
 
+        # Playlists
+        self.add = Button(self.menu, text="+", bg="Black", fg="White", height="1", command=AddPlaylist)
+        self.add.config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
+        self.add.pack(fill="x")
+
         # For with the playlists
+        self.playButtons = []
+        for i in range(0, len(self.playlists[0])):
+            self.playButtons.append(Button(self.menu, text=f"{self.playlists[0][i]}", bg="Black", fg="White", height="1")) # , command=AddPlaylist)
+            self.playButtons[i].config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
+            self.playButtons[i].pack(fill="x")
+
 
     def stuffConstruct(self, playlist="", order="char", reCreate=""): # Will be "reconstructed" many times
         if reCreate:
@@ -266,6 +279,47 @@ class Edit(MainApp):
         Button(self.frame, text="Rename").pack(pady=5, padx=10, fill=X, expand=True)
         Button(self.frame, text="Delete").pack(pady=5, padx=10, fill=X, expand=True)
         Button(self.frame, text="Information").pack(pady=5, padx=10, fill=X, expand=True)
+
+class AddPlaylist(MainApp):
+    def __init__(self):
+        self.screen = Toplevel()
+        self.screen.title("Add new Playlist")
+        self.screen.grab_set()
+        self.screen.iconbitmap('./images/music-logo.ico')
+        self.screen.geometry(f"{int(app.sizes[0]*0.8*0.35)}x{int(app.sizes[1]*0.8*0.6)}+{int(app.sizes[0]*0.1)}+{int(app.sizes[1]*0.1)}")
+        self.screen.resizable(0,0)
+        self.screen.config(bg="Black")
+
+        self.musics = files.findMusics()
+
+        Label(self.screen, text="Name: ", fg="White", bg="Black").grid(row=0, column=0, padx=10, pady=15)
+        self.name = Entry(self.screen, width=35)
+        self.name.grid(row=0, column=1)
+
+        self.box = Listbox(self.screen, height=12, width=40, selectmode=MULTIPLE, font="size=8")
+        self.box.grid(row=1, column=0, columnspan=2, padx=10)
+        for music in self.musics:
+            self.box.insert(END, music)
+
+        Button(self.screen, text="Create", command=self.create, width=30).grid(row=2, column=0, columnspan=2, padx=10, pady=15)
+
+    def create(self):
+        try:
+            name = self.name.get()
+            musicsPoses = self.box.curselection()
+            musics = []
+
+            if len(name) <= 2:
+                messagebox.showerror('Error', f"A error has happened:\nThe name of the playlist is too short!")
+            else:
+                for pos in musicsPoses:
+                    musics.append(self.musics[pos])
+
+                playlist.createPlaylist(name, musics)
+                messagebox.showinfo('Succeed', 'The playlist was created!')
+                self.screen.destroy()
+        except Exception as e:
+            messagebox.showerror('Error', f"A error has happened:\n{e}")
 
 
 def main():
