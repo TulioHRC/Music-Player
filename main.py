@@ -135,17 +135,17 @@ class MainApp:
             self.musicsList = files.findMusics('', order)
 
         self.musicsWidgets = {}
-        for n in range(1, len(self.musicsList)):
+        for n in range(0, len(self.musicsList)):
             self.musicsWidgets[f"{self.musicsList[n]}"] = Button(self.stuff, text=self.musicsList[n], font=('Arial', 12),
                                     command=lambda i=self.musicsList[n]: self.playM(i), bg="Black", fg="White",
                                     width=80, height=1)
-            self.musicsWidgets[f"{self.musicsList[n]}"].grid(row=n+1, column=0, padx=10)
+            self.musicsWidgets[f"{self.musicsList[n]}"].grid(row=n+2, column=0, padx=10)
 
             path = r"./images/see more.png"
             img = ImageTk.PhotoImage(Image.open(path).resize((int(self.sizes[0]*0.8*0.05), int(self.sizes[1]*0.8*0.05)), Image.ANTIALIAS))
             panel = Button(self.stuff, image=img, border="0.1", command=lambda i=self.musicsList[n]: Edit(i))
             panel.photo = img
-            panel.grid(row=n+1, column=1, padx=30)
+            panel.grid(row=n+2, column=1, padx=30)
 
         Label(self.stuff, text="", height=1).grid(row=len(self.musicsList)+1, column=0)
         Label(self.stuff, text="", height=1).grid(row=len(self.musicsList)+2, column=0)
@@ -291,7 +291,7 @@ class MainApp:
             r = messagebox.askyesno("Deleting Playlist", "You are going to delete this playlist. Are you sure?")
             if r:
                 playlist.deletePlaylist(name)
-                
+
                 app.master.destroy() # Restart app
                 main()
         except Exception as e:
