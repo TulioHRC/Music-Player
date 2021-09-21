@@ -63,7 +63,7 @@ class MainApp:
                     highlightbackground="White", highlightcolor="White").pack(fill="x")
 
         # Playlists
-        self.add = Button(self.menu, text="+", bg="Black", fg="White", height="1", command=AddPlaylist)
+        self.add = Button(self.menu, text="+ Playlist", bg="Black", fg="Gray", height="1", command=AddPlaylist)
         self.add.config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
         self.add.pack(fill="x")
 
@@ -123,11 +123,19 @@ class MainApp:
             self.playlists = playlist.loadPlaylists()
             playlistPos = list(self.playlists[0]).index(playlistName)
             self.musicsList = files.findMusics(self.playlists[1][playlistPos], order)
+
+            # Config buttons of playlist
+            Button(self.stuff, text="Edit Playlist", font=('Arial', 16), width=20, bg='#5379b5', fg="White").grid(row=1, column=0)
+            path = r"./images/trash.jpg"
+            img = ImageTk.PhotoImage(Image.open(path).resize((int(self.sizes[0]*0.8*0.05), int(self.sizes[1]*0.8*0.08)), Image.ANTIALIAS))
+            trash = Button(self.stuff, image=img, border="0.1", command=lambda i=playlistName: self.delete(playlistName))
+            trash.photo = img
+            trash.grid(row=1, column=1, pady = 10)
         else:
             self.musicsList = files.findMusics('', order)
 
         self.musicsWidgets = {}
-        for n in range(0, len(self.musicsList)):
+        for n in range(1, len(self.musicsList)):
             self.musicsWidgets[f"{self.musicsList[n]}"] = Button(self.stuff, text=self.musicsList[n], font=('Arial', 12),
                                     command=lambda i=self.musicsList[n]: self.playM(i), bg="Black", fg="White",
                                     width=80, height=1)
@@ -278,6 +286,17 @@ class MainApp:
     def space(self, event):
         self.play.invoke()
 
+    def delete(self, name):
+        try:
+            r = messagebox.askyesno("Deleting Playlist", "You are going to delete this playlist. Are you sure?")
+            if r:
+                playlist.deletePlaylist(name)
+                
+                app.master.destroy() # Restart app
+                main()
+        except Exception as e:
+            print(e)
+
 class Edit(MainApp):
     def __init__(self, music):
         self.screen = Toplevel()
@@ -327,9 +346,10 @@ class AddPlaylist(MainApp):
             name = self.name.get()
             musicsPoses = self.box.curselection()
             musics = []
+            self.playlists = playlist.loadPlaylists()
 
-            if len(name) <= 2:
-                messagebox.showerror('Error', f"A error has happened:\nThe name of the playlist is too short!")
+            if len(name) <= 2 or name in self.playlists[0]:
+                int('A error has happened:\nThe name of the playlist is too short\n or this name has already being used!')
             else:
                 for pos in musicsPoses:
                     musics.append(self.musics[pos])
@@ -337,6 +357,9 @@ class AddPlaylist(MainApp):
                 playlist.createPlaylist(name, musics)
                 messagebox.showinfo('Succeed', 'The playlist was created!')
                 self.screen.destroy()
+
+                app.master.destroy() # Restart app
+                main()
         except Exception as e:
             messagebox.showerror('Error', f"A error has happened:\n{e}")
 

@@ -20,7 +20,12 @@ Just 4 fun.
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
 
-### 1.2 (Menu to use)
+### 1.2.1 (New Features)
+- Edit Playlists
+- Edit Musics option
+- Music time bar
+
+### 1.2 (Basic Application)
 ![image](https://user-images.githubusercontent.com/62257920/133005711-2b63c00d-448d-4588-908d-58666163d896.png)
 
 I created:
@@ -28,8 +33,9 @@ I created:
 - Advance and before musics
 - Randomize method (perfect working, and tested)
 - Keyboard Functions
-- Menu Frame (all, recent, ...)
+- Menu Frame (all, recent, playlists)
 - Changed the music module, (tkinter -> VLC) Because of the size of tkinter, is much bigger than VLC module, and VLC don't bugs in my pc, like Tkinter.
+- Playlists settings (delete and create)
 
 
 ### 1.1.1 (Audio Functions, create all the audio functions that I will use, and test it)
