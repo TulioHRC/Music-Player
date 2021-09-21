@@ -70,12 +70,12 @@ class MainApp:
         # For with the playlists
         self.playButtons = []
         for i in range(0, len(self.playlists[0])):
-            self.playButtons.append(Button(self.menu, text=f"{self.playlists[0][i]}", bg="Black", fg="White", height="1")) # , command=AddPlaylist)
+            self.playButtons.append(Button(self.menu, text=f"{self.playlists[0][i]}", bg="Black", fg="White", height="1", command=lambda i=i: self.stuffConstruct(self.playlists[0][i], reCreate=1))) # , command=AddPlaylist)
             self.playButtons[i].config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
             self.playButtons[i].pack(fill="x")
 
 
-    def stuffConstruct(self, playlist="", order="char", reCreate=""): # Will be "reconstructed" many times
+    def stuffConstruct(self, playlistName="", order="char", reCreate=""): # Will be "reconstructed" many times
         if reCreate:
             try:
                 self.mainStuff.destroy()
@@ -84,13 +84,23 @@ class MainApp:
                 print(e)
                 messagebox.showerror('Error', f"A error has happened:\n{e}")
 
-        if not playlist:
+        if not playlistName:
             if order=="char":
                 self.recent.config(bg="Black")
                 self.all.config(bg="Gray")
             else:
                 self.recent.config(bg="Gray")
                 self.all.config(bg="Black")
+        else:
+            self.menu.destroy()
+            self.mainStuff.destroy()
+            self.menu = Frame(self.master)
+            self.menu.pack()
+            self.menu.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8)),
+                                width=str(int(self.sizes[0]*0.8*0.2)), relx=0, rely=0)
+            self.menu.config(background="#151a24")
+            self.menuConstruct()
+
 
             # Else playlist (put the colors on the playlists List)
 
@@ -109,7 +119,13 @@ class MainApp:
         panel.photo = img
         panel.grid(row=0, column=0, columnspan=2, pady=10)
 
-        self.musicsList = files.findMusics(playlist, order)
+        if playlistName:
+            self.playlists = playlist.loadPlaylists()
+            playlistPos = list(self.playlists[0]).index(playlistName)
+            self.musicsList = files.findMusics(self.playlists[1][playlistPos], order)
+        else:
+            self.musicsList = files.findMusics('', order)
+
         self.musicsWidgets = {}
         for n in range(0, len(self.musicsList)):
             self.musicsWidgets[f"{self.musicsList[n]}"] = Button(self.stuff, text=self.musicsList[n], font=('Arial', 12),
@@ -122,6 +138,9 @@ class MainApp:
             panel = Button(self.stuff, image=img, border="0.1", command=lambda i=self.musicsList[n]: Edit(i))
             panel.photo = img
             panel.grid(row=n+1, column=1, padx=30)
+
+        Label(self.stuff, text="", height=1).grid(row=len(self.musicsList)+1, column=0)
+        Label(self.stuff, text="", height=1).grid(row=len(self.musicsList)+2, column=0)
 
 
     def playerConstruct(self):

@@ -5,6 +5,8 @@ def findMusics(playlist="", order="char"):
     if not playlist:
         for m in os.listdir('./musics/'):
             musics.append(m[:-4]) # Take off extension (.mp4)
+    else:
+        musics = playlist.split(';')
 
     if order == "char":
         musics.sort(key=lambda v: v.upper())
