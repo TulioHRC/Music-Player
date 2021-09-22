@@ -191,10 +191,14 @@ class MainApp:
         self.volumeS.set(50)
 
 
-    def check(self):
+    def check(self, first=False):
         # Check if the music is playing or not (to auto advance to the next music)
         if self.playing == 1 and audio.checkMusic() == 0:
-            self.change(1)
+            if first:
+                # If the VLC player had an error
+                print('It has happened a small player error, but we resolved it!')
+            else:
+                root.after(500, self.change(1))
         if self.playing != 0:
             root.after(1000, self.check)
 
@@ -213,10 +217,14 @@ class MainApp:
             # If the music is the same that the one was playing
             if self.music == path:
                 unpause = 1
+            elif firstTime != 1:
+                self.musicsWidgets[f"{self.music}"].config(bg="black")
+
+            self.musicsWidgets[f"{path}"].config(bg="gray")
 
             audio.playMusic(f"./musics/{path}.mp3", unpause, firstTime)
 
-            self.music =path # Put the music selected
+            self.music = path # Put the music selected
 
             # Changing Button and others widgets
             self.play["text"] = unescape(' &#9612;&#9612;')
@@ -228,9 +236,10 @@ class MainApp:
             if firstTime:
                 audio.volume(self.volumeS.get())
 
-            root.after(1000, self.check) # Starts the loop of checking
+            root.after(1000, self.check(first=True)) # Starts the loop of checking
         except Exception as e:
             messagebox.showerror('Error', f"A error has happened:\n{e}")
+            self.master.destroy()
 
     def pause(self):
         try:
