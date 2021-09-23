@@ -15,3 +15,9 @@ def findMusics(playlist="", order="char"):
         musics.reverse()
 
     return musics
+
+def renameMusic(path, new):
+    os.rename(f"./musics/{path}.mp3", f"./musics/{new}.mp3")
+
+def deleteMusic(path):
+    os.remove(f"./musics/{path}.mp3")

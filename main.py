@@ -314,20 +314,64 @@ class Edit(MainApp):
         self.screen.title("Edit")
         self.screen.grab_set()
         self.screen.iconbitmap('./images/music-logo.ico')
-        self.screen.geometry(f"{int(app.sizes[0]*0.8*0.2)}x{int(app.sizes[1]*0.8*0.3)}+{int(app.sizes[0]*0.1)}+{int(app.sizes[1]*0.1)}")
+        self.screen.geometry(f"{int(app.sizes[0]*0.8*0.4)}x{int(app.sizes[1]*0.8*0.3)}+{int(app.sizes[0]*0.1)}+{int(app.sizes[1]*0.1)}")
         self.screen.resizable(0,0)
-
         self.music = music
 
         self.initFrame()
 
     def initFrame(self):
+        try:
+            self.frame.destroy()
+        except:
+            pass
         self.frame = Frame(self.screen)
         self.frame.pack(fill=BOTH, expand=True)
+        self.frame.config(bg="Black")
 
-        Button(self.frame, text="Rename").pack(pady=5, padx=10, fill=X, expand=True)
-        Button(self.frame, text="Delete").pack(pady=5, padx=10, fill=X, expand=True)
-        Button(self.frame, text="Information").pack(pady=5, padx=10, fill=X, expand=True)
+        Label(self.frame, text=f"{self.music}", font=('Arial', 8), fg="White", bg="Black").pack(pady=5, padx=10, fill=X, expand=True)
+        Button(self.frame, text="Rename", font=('Arial', 15), fg="White", bg="Black",
+                    command=self.renameFrame).pack(pady=5, padx=10, fill=X, expand=True)
+        Button(self.frame, text="Delete", font=('Arial', 15), fg="White", bg="Black",
+                    command=self.delete).pack(pady=5, padx=10, fill=X, expand=True)
+        Button(self.frame, text="Information", font=('Arial', 15), fg="White", bg="Black").pack(pady=5, padx=10, fill=X, expand=True)
+
+    def renameFrame(self):
+        self.frame.destroy()
+        self.frame = Frame(self.screen)
+        self.frame.pack(fill=BOTH, expand=True)
+        self.frame.config(bg="Black")
+
+        img = ImageTk.PhotoImage(Image.open(r"./images/back.jpg").resize((int(app.sizes[0]*0.8*0.8*0.04),
+                                        int(app.sizes[1]*0.8*0.2*0.25)), Image.ANTIALIAS))
+        self.back = Button(self.frame, image=img, border="0", fg="White", bg="Black", command=self.initFrame)
+        self.back.photo = img
+        self.back.pack(pady=1, padx=10, fill=X, expand=True)
+        Label(self.frame, text=f"{self.music}", font=('Arial', 8), fg="White", bg="Black").pack(pady=5, padx=10, fill=X, expand=True)
+        self.newName = Entry(self.frame, font=('Arial', 18))
+        self.newName.pack(pady=5, padx=10, fill=X, expand=True)
+        Button(self.frame, text="Rename Music", font=('Arial', 18), fg="White", bg="Black",
+                    command=lambda: self.rename(self.newName.get())).pack(pady=5, padx=10, fill=X, expand=True)
+
+    def rename(self, name):
+        try:
+            files.renameMusic(self.music, name)
+            messagebox.showinfo('Succeed', f'We changed the {self.music} to {name}!\nNow we are restarting the application...')
+            app.master.destroy()
+            main()
+        except Exception as e:
+            messagebox.showerror('Error', f'There was an error to rename the music.\n{e}')
+
+    def delete(self):
+        try:
+            r = messagebox.askyesno('Delete', f'Are you sure to delete {self.music}?')
+            if r:
+                files.deleteMusic(self.music)
+                messagebox.showinfo('Succeed', f'We deleted {self.music}!\nNow we are restarting the application...')
+                app.master.destroy()
+                main()
+        except Exception as e:
+            messagebox.showerror('Error', f'There was an error when we were trying to delete you music.\n{e}')
 
 class AddPlaylist(MainApp):
     def __init__(self, editPlaylist=False):

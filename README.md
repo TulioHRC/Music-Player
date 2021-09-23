@@ -21,11 +21,13 @@ Just 4 fun.
 Remembering that the versions above 1.0.0 will restart all the project
 
 ### 1.3 (Complete application)
-- Edit Musics option
 - Music time bar
 
-### 1.2.1 (New Features)
-- Edit Playlists
+### 1.2.2 (Edit Musics)
+Created an way to rename musics or delete them.
+
+### 1.2.1 (Edit Playlists)
+Created an way to edit created playlists.
 
 ### 1.2 (Basic Application)
 ![image](https://user-images.githubusercontent.com/62257920/133005711-2b63c00d-448d-4588-908d-58666163d896.png)
