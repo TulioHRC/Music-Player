@@ -12,6 +12,20 @@ def createPlaylist(name, musicsList):
 
     cur.close()
 
+def updatePlaylist(name, musicsList):
+    musics = ';'.join(musicsList)
+
+    con = sqlite3.connect("./data/data.sqlite")
+    cur = con.cursor()
+    sql = ''' UPDATE Playlists
+              SET Name = ? ,
+                  Musics = ?
+              WHERE Name = ?'''
+    cur.execute(sql, (name, musics, name,))
+    con.commit()
+
+    cur.close()
+
 def deletePlaylist(name):
     con = sqlite3.connect('./data/data.sqlite')
     cur = con.cursor()

@@ -125,7 +125,8 @@ class MainApp:
             self.musicsList = files.findMusics(self.playlists[1][playlistPos], order)
 
             # Config buttons of playlist
-            Button(self.stuff, text="Edit Playlist", font=('Arial', 16), width=20, bg='#5379b5', fg="White").grid(row=1, column=0)
+            Button(self.stuff, text="Edit Playlist", font=('Arial', 16), width=20, bg='#5379b5', fg="White",
+                        command=lambda: AddPlaylist(playlistName)).grid(row=1, column=0)
             path = r"./images/trash.jpg"
             img = ImageTk.PhotoImage(Image.open(path).resize((int(self.sizes[0]*0.8*0.05), int(self.sizes[1]*0.8*0.08)), Image.ANTIALIAS))
             trash = Button(self.stuff, image=img, border="0.1", command=lambda i=playlistName: self.delete(playlistName))
@@ -147,8 +148,8 @@ class MainApp:
             panel.photo = img
             panel.grid(row=n+2, column=1, padx=30)
 
-        Label(self.stuff, text="", height=1).grid(row=len(self.musicsList)+1, column=0)
-        Label(self.stuff, text="", height=1).grid(row=len(self.musicsList)+2, column=0)
+        Label(self.stuff, text="", height=1, bg="#353638").grid(row=len(self.musicsList)+2, column=0)
+        Label(self.stuff, text="", height=1, bg="#353638").grid(row=len(self.musicsList)+3, column=0)
 
 
     def playerConstruct(self):
@@ -195,8 +196,9 @@ class MainApp:
         # Check if the music is playing or not (to auto advance to the next music)
         if self.playing == 1 and audio.checkMusic() == 0:
             if first:
-                # If the VLC player had an error
-                print('It has happened a small player error, but we resolved it!')
+                # If the VLC player had an error or the player hasn't started yet
+                # print('It has happened a small player error, but we resolved it!')
+                pass
             else:
                 root.after(500, self.change(1))
         if self.playing != 0:
@@ -328,9 +330,11 @@ class Edit(MainApp):
         Button(self.frame, text="Information").pack(pady=5, padx=10, fill=X, expand=True)
 
 class AddPlaylist(MainApp):
-    def __init__(self):
+    def __init__(self, editPlaylist=False):
         self.screen = Toplevel()
         self.screen.title("Add new Playlist")
+        if editPlaylist:
+            self.screen.title(f"Edit {editPlaylist} Playlist")
         self.screen.grab_set()
         self.screen.iconbitmap('./images/music-logo.ico')
         self.screen.geometry(f"{int(app.sizes[0]*0.8*0.35)}x{int(app.sizes[1]*0.8*0.6)}+{int(app.sizes[0]*0.1)}+{int(app.sizes[1]*0.1)}")
@@ -338,17 +342,32 @@ class AddPlaylist(MainApp):
         self.screen.config(bg="Black")
 
         self.musics = files.findMusics()
+        self.playlistEdit = editPlaylist
 
-        Label(self.screen, text="Name: ", fg="White", bg="Black").grid(row=0, column=0, padx=10, pady=15)
-        self.name = Entry(self.screen, width=35)
-        self.name.grid(row=0, column=1)
+        if not editPlaylist:
+            Label(self.screen, text="Name: ", fg="White", bg="Black").grid(row=0, column=0, padx=10, pady=15)
+            self.name = Entry(self.screen, width=35)
+            self.name.grid(row=0, column=1)
 
         self.box = Listbox(self.screen, height=12, width=40, selectmode=MULTIPLE, font="size=8")
-        self.box.grid(row=1, column=0, columnspan=2, padx=10)
+        self.box.grid(row=1, column=0, columnspan=2, padx=10, pady=15)
         for music in self.musics:
             self.box.insert(END, music)
 
-        Button(self.screen, text="Create", command=self.create, width=30).grid(row=2, column=0, columnspan=2, padx=10, pady=15)
+        if editPlaylist:
+            # List of already musics in the playlist
+            self.playlists = playlist.loadPlaylists()
+            self.musicsList = files.findMusics(self.playlists[1][list(self.playlists[0]).index(editPlaylist)])
+
+            self.box.selection_clear(0, END)
+            for music in self.musicsList:
+                self.pos = self.musics.index(music)
+                self.box.selection_set(self.pos)
+                self.box.activate(self.pos)
+
+            Button(self.screen, text="Edit", command=self.edit, width=30).grid(row=2, column=0, columnspan=2, padx=10, pady=15)
+        else:
+            Button(self.screen, text="Create", command=self.create, width=30).grid(row=2, column=0, columnspan=2, padx=10, pady=15)
 
     def create(self):
         try:
@@ -369,6 +388,24 @@ class AddPlaylist(MainApp):
 
                 app.master.destroy() # Restart app
                 main()
+        except Exception as e:
+            messagebox.showerror('Error', f"A error has happened:\n{e}")
+
+    def edit(self):
+        try:
+            musicsPoses = self.box.curselection()
+            musics = []
+            self.playlists = playlist.loadPlaylists()
+
+            for pos in musicsPoses:
+                musics.append(self.musics[pos])
+
+            playlist.updatePlaylist(self.playlistEdit, musics)
+            messagebox.showinfo('Succeed', f'The playlist {self.playlistEdit} was edited!')
+            self.screen.destroy()
+
+            app.master.destroy() # Restart app
+            main()
         except Exception as e:
             messagebox.showerror('Error', f"A error has happened:\n{e}")
 
