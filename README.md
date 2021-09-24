@@ -20,8 +20,11 @@ Just 4 fun.
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
 
-### 1.3 (Complete application)
-- Music time bar
+### 1.3 (Music Time bar)
+- Music time position bar
+- Improved scales of volume and time bar
+- Fixxed error of trying to change volume
+- Convertor of seconds to '00:00' format
 
 ### 1.2.2 (Edit Musics)
 Created an way to rename musics or delete them.

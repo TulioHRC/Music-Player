@@ -2,9 +2,10 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from functions import music as audio
-from functions import files as files
+from functions import files
 from functions.scrollbar import createScrollableFrame
 from functions import playlists as playlist
+from functions import conversor
 from html import unescape
 import random
 
@@ -21,6 +22,7 @@ class MainApp:
         # Important variables
         self.playing = 0
         self.volume = 50
+        self.musicPos = 0
         self.music = ''
         self.musicsList = []
         self.playlists = playlist.loadPlaylists()
@@ -137,16 +139,19 @@ class MainApp:
 
         self.musicsWidgets = {}
         for n in range(0, len(self.musicsList)):
-            self.musicsWidgets[f"{self.musicsList[n]}"] = Button(self.stuff, text=self.musicsList[n], font=('Arial', 12),
-                                    command=lambda i=self.musicsList[n]: self.playM(i), bg="Black", fg="White",
-                                    width=80, height=1)
-            self.musicsWidgets[f"{self.musicsList[n]}"].grid(row=n+2, column=0, padx=10)
+            try:
+                self.musicsWidgets[f"{self.musicsList[n]}"] = Button(self.stuff, text=self.musicsList[n], font=('Arial', 12),
+                                        command=lambda i=self.musicsList[n]: self.playM(i), bg="Black", fg="White",
+                                        width=80, height=1)
+                self.musicsWidgets[f"{self.musicsList[n]}"].grid(row=n+2, column=0, padx=10)
 
-            path = r"./images/see more.png"
-            img = ImageTk.PhotoImage(Image.open(path).resize((int(self.sizes[0]*0.8*0.05), int(self.sizes[1]*0.8*0.05)), Image.ANTIALIAS))
-            panel = Button(self.stuff, image=img, border="0.1", command=lambda i=self.musicsList[n]: Edit(i))
-            panel.photo = img
-            panel.grid(row=n+2, column=1, padx=30)
+                path = r"./images/see more.png"
+                img = ImageTk.PhotoImage(Image.open(path).resize((int(self.sizes[0]*0.8*0.05), int(self.sizes[1]*0.8*0.05)), Image.ANTIALIAS))
+                panel = Button(self.stuff, image=img, border="0.1", command=lambda i=self.musicsList[n]: Edit(i))
+                panel.photo = img
+                panel.grid(row=n+2, column=1, padx=30)
+            except Exception as e:
+                print(f'There was an error to load the musics.\n{e}')
 
         Label(self.stuff, text="", height=1, bg="#353638").grid(row=len(self.musicsList)+2, column=0)
         Label(self.stuff, text="", height=1, bg="#353638").grid(row=len(self.musicsList)+3, column=0)
@@ -154,10 +159,10 @@ class MainApp:
 
     def playerConstruct(self):
         self.name = Label(self.player, text="", border="0", fg="White")
-        self.name.config(font=('Arial', 12), background='#000000')
+        self.name.config(font=('Arial', 10), background='#000000')
         self.name.pack()
         self.name.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.3)),
-                            width=str(int(self.sizes[0]*0.8*0.8*0.4)), relx=0.025, rely=0)
+                            width=str(int(self.sizes[0]*0.8*0.8*0.45)), relx=0.05, rely=0)
 
         self.before = Button(self.player, text=unescape('&#9664;&#9664;'), border="0", fg="White",
                                 font=('MS Sans Serif', 36), background='#000000', command=lambda: self.change(-1))
@@ -177,6 +182,24 @@ class MainApp:
         self.forward.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.4)),
                             width=str(int(self.sizes[0]*0.8*0.8*0.05)), relx=0.2, rely=0.3)
 
+        # Music Time position changer
+        self.musicScale = Scale(self.player, from_=0, to=100, orient=HORIZONTAL, fg='#2e99db', bg='white'
+                                , command=self.changePos, variable=self.musicPos, resolution=0.5,
+                                state=DISABLED, troughcolor='#2e99db', showvalue=0)
+        self.musicScale.pack()
+        self.musicScale.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.2)),
+                            width=str(int(self.sizes[0]*0.8*0.8*0.35)), relx=0.28, rely=0.4)
+
+        self.sTime = Label(self.player, text="00:00", bg='#000000', fg="gray")
+        self.sTime.pack()
+        self.sTime.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.1)),
+                            width=str(int(self.sizes[0]*0.8*0.8*0.05)), relx=0.26, rely=0.7)
+
+        self.fTime = Label(self.player, text="00:00", bg='#000000', fg="gray")
+        self.fTime.pack()
+        self.fTime.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.1)),
+                            width=str(int(self.sizes[0]*0.8*0.8*0.05)), relx=0.6, rely=0.7)
+
         img = ImageTk.PhotoImage(Image.open(r"./images/shuffle.png").resize((int(self.sizes[0]*0.8*0.8*0.04),
                                         int(self.sizes[1]*0.8*0.2*0.25)), Image.ANTIALIAS))
         self.random = Button(self.player, image=img, fg="white", bg="black", border="0", command=self.randomize)
@@ -184,11 +207,16 @@ class MainApp:
         self.random.pack()
         self.random.place(bordermode=OUTSIDE, anchor="nw", relx=0.66, rely=0.375)
 
+        self.volumeLabel = Label(self.player, text="Volume", bg='#000000', fg="gray")
+        self.volumeLabel.pack()
+        self.volumeLabel.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.2)),
+                            width=str(int(self.sizes[0]*0.8*0.8*0.05)), relx=0.825, rely=0.2)
+
         self.volumeS = Scale(self.player, from_=0, to=100, orient=HORIZONTAL, fg='white', bg='#000000'
-                                , command=audio.volume, variable=self.volume)
+                                , command=audio.volume, variable=self.volume, showvalue=0)
         self.volumeS.pack()
-        self.volumeS.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.4)),
-                            width=str(int(self.sizes[0]*0.8*0.8*0.2)), relx=0.75, rely=0.3)
+        self.volumeS.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.2)),
+                            width=str(int(self.sizes[0]*0.8*0.8*0.2)), relx=0.75, rely=0.4)
         self.volumeS.set(50)
 
 
@@ -202,6 +230,12 @@ class MainApp:
             else:
                 root.after(500, self.change(1))
         if self.playing != 0:
+            if self.fTime['text'] == '00:00':
+                self.fTime['text'] = conversor.secToTimer(audio.getTimes()[1])
+            else:
+                times = audio.getTimes()
+                self.musicScale.set(round((times[0]*100/times[1]), 1))
+            self.sTime['text'] = conversor.secToTimer(audio.getTimes()[0])
             root.after(1000, self.check)
 
     def playM(self, path='', firstTime=0):
@@ -237,6 +271,9 @@ class MainApp:
 
             if firstTime:
                 audio.volume(self.volumeS.get())
+
+            self.fTime['text'] = '00:00' # Restarting fTime
+            self.musicScale['state'] = 'active'
 
             root.after(1000, self.check(first=True)) # Starts the loop of checking
         except Exception as e:
@@ -307,6 +344,12 @@ class MainApp:
                 main()
         except Exception as e:
             print(e)
+
+    def changePos(self, value):
+        times = audio.getTimes()
+        actual = round((times[0]*100/times[1]), 1)
+        if (float(value)-actual) > 2.5 or (float(value)-actual) < -2.5: # If changed sufficient
+            audio.changeMusicPosition(times[1]*(float(value)/100)*1000)
 
 class Edit(MainApp):
     def __init__(self, music):

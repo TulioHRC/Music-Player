@@ -1,6 +1,6 @@
 # VLC
 
-import vlc
+from vlc import MediaPlayer
 
 # Don't bugs in my PC
 
@@ -12,8 +12,11 @@ def playMusic(PATH, unpause, firstTime=0):
     else:
         if not firstTime:
             music.stop() # "Kills" the last song
-        music = vlc.MediaPlayer(PATH)
+        music = MediaPlayer(PATH)
         music.play()
+
+def changeMusicPosition(newTime):
+    music.set_time(int(newTime))
 
 def pauseMusic():
     music.pause()
@@ -21,12 +24,15 @@ def pauseMusic():
 def checkMusic():
     return music.is_playing()
 
+def getTimes():
+    return [int(round(music.get_time()/1000, 0)), int(round(music.get_length()/1000, 0))]
+
 def volume(value):
-    try:
-        music.audio_set_volume(int(value))
-    except Exception as e:
-        print('Volume is trying to change, before the mixer is initialized.')
-        print(e)
+    if 'music' in globals(): # Check if the global variable exists
+        try:
+            music.audio_set_volume(int(value))
+        except Exception as e:
+            print(e)
 
 
 
