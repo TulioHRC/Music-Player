@@ -26,6 +26,7 @@ class MainApp:
         self.music = ''
         self.musicsList = []
         self.playlists = playlist.loadPlaylists()
+        self.posPlaylists = 0
         self.backupList = []
         self.randomized = 0
 
@@ -69,15 +70,49 @@ class MainApp:
         self.add.config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
         self.add.pack(fill="x")
 
+        self.playlistsConstruct(playlistName, self.posPlaylists)
+
+    def playlistsConstruct(self, playlistName='', start=0):
+        try:
+            self.playlistsFrame.destroy()
+        except:
+            pass
+
+        self.playlistsFrame = Frame(self.menu)
+        self.playlistsFrame.pack(fill="x")
+
+        up = Button(self.playlistsFrame, text=unescape('&#10506;'), bg="Black", fg="White",
+                    command=lambda: self.changeMenuPosition(playlistName, -1))
+        up.pack(fill="x")
+        if start == 0:
+            up.config(state=DISABLED)
+
         # For with the playlists
         self.playButtons = []
-        for i in range(0, len(self.playlists[0])):
-            self.playButtons.append(Button(self.menu, text=f"{self.playlists[0][i]}", bg="Black", fg="White", height="1", command=lambda i=i: self.stuffConstruct(self.playlists[0][i], reCreate=1))) # , command=AddPlaylist)
+
+        if len(self.playlists[0]) > (6+start):
+            max = start + 6
+        else:
+            max = len(self.playlists[0])
+
+        for i in range(0, 6):
+            self.playButtons.append(Button(self.playlistsFrame, text=f"{self.playlists[0][i+start]}", bg="Black", fg="White", height="1",
+                                        command=lambda i=i: self.stuffConstruct(self.playlists[0][i+start], reCreate=1)))
             self.playButtons[i].config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
-            if playlistName == self.playlists[0][i]:
+            if playlistName == self.playlists[0][i+start]:
                 self.playButtons[i].config(bg="Gray")
             self.playButtons[i].pack(fill="x")
 
+        if len(self.playlists[0]) > 6:
+            bt = Button(self.playlistsFrame, text=unescape('&#10507;'), bg="Black", fg="White",
+                        command=lambda: self.changeMenuPosition(playlistName, 1))
+            bt.pack(fill="x")
+            if (start + 6) >= len(self.playlists[0]):
+                bt.config(state=DISABLED)
+
+    def changeMenuPosition(self, playlistName, change):
+        self.posPlaylists += change
+        self.playlistsConstruct(playlistName, self.posPlaylists)
 
     def stuffConstruct(self, playlistName="", order="char", reCreate=""): # Will be "reconstructed" many times
         if reCreate:

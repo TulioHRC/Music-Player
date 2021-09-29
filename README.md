@@ -20,6 +20,10 @@ Just 4 fun.
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
 
+### 1.3.2 (Unlimited playlists)
+- "Scroll" to playlists in the menu
+- Symbols in the up and down buttons
+
 ### 1.3.1 (Playlist colors)
 - Playlist colors when selected
 
