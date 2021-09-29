@@ -24,6 +24,7 @@ Remembering that the versions above 1.0.0 will restart all the project
 - Playlist colors when selected
 
 ### 1.3 (Music Time bar)
+![image](https://user-images.githubusercontent.com/62257920/134737213-5f40ec6e-5022-4dd5-9718-eaf2997be5cd.png)
 - Music time position bar
 - Improved scales of volume and time bar
 - Fixxed error of trying to change volume
