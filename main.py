@@ -49,7 +49,7 @@ class MainApp:
         # Keyboards shortcuts
         self.master.bind("<space>", self.space)
 
-    def menuConstruct(self):
+    def menuConstruct(self, playlistName=''):
         menuSymbol = Label(self.menu, text=unescape("&#9776;"), bg="Black", fg="White", height="1", font=('Arial', 16))
         menuSymbol.pack(fill="x")
 
@@ -74,6 +74,8 @@ class MainApp:
         for i in range(0, len(self.playlists[0])):
             self.playButtons.append(Button(self.menu, text=f"{self.playlists[0][i]}", bg="Black", fg="White", height="1", command=lambda i=i: self.stuffConstruct(self.playlists[0][i], reCreate=1))) # , command=AddPlaylist)
             self.playButtons[i].config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
+            if playlistName == self.playlists[0][i]:
+                self.playButtons[i].config(bg="Gray")
             self.playButtons[i].pack(fill="x")
 
 
@@ -86,6 +88,8 @@ class MainApp:
                 print(e)
                 messagebox.showerror('Error', f"A error has happened:\n{e}")
 
+        # Playlist Colors
+
         if not playlistName:
             if order=="char":
                 self.recent.config(bg="Black")
@@ -93,6 +97,9 @@ class MainApp:
             else:
                 self.recent.config(bg="Gray")
                 self.all.config(bg="Black")
+
+            for b in self.playButtons:
+                b.config(bg="Black")
         else:
             self.menu.destroy()
             self.mainStuff.destroy()
@@ -101,7 +108,7 @@ class MainApp:
             self.menu.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8)),
                                 width=str(int(self.sizes[0]*0.8*0.2)), relx=0, rely=0)
             self.menu.config(background="#151a24")
-            self.menuConstruct()
+            self.menuConstruct(playlistName)
 
 
             # Else playlist (put the colors on the playlists List)

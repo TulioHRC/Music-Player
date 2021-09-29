@@ -20,6 +20,9 @@ Just 4 fun.
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
 
+### 1.3.1 (Playlist colors)
+- Playlist colors when selected
+
 ### 1.3 (Music Time bar)
 - Music time position bar
 - Improved scales of volume and time bar
