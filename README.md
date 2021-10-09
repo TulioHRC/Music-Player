@@ -20,6 +20,11 @@ Just 4 fun.
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
 
+### 1.4 (Basic Configuration)
+- Basic configuration screen
+- Small upgrades in the Menu
+- Border in the player
+
 ### 1.3.2 (Unlimited playlists)
 - "Scroll" to playlists in the menu
 - Symbols in the up and down buttons

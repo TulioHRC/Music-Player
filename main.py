@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 from PIL import Image, ImageTk
 from functions import music as audio
 from functions import files
@@ -43,7 +43,8 @@ class MainApp:
         self.player = Frame(self.master)
         self.player.pack()
         self.player.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2)),
-                            width=str(int(self.sizes[0]*0.8*0.8)), relx=0.2, rely=0.8)
+                            width=str(int(self.sizes[0]*0.8*0.8)), relx=0.2001, rely=0.801)
+        # The decimals in the relx and rely are for give the player a "margin"
         self.player.config(background="#000000")
         self.playerConstruct()
 
@@ -55,22 +56,26 @@ class MainApp:
         menuSymbol.pack(fill="x")
 
         self.all = Button(self.menu, text="All Songs", bg="Black", fg="White", height="1", command=lambda: self.stuffConstruct(order="char", reCreate=1))
-        self.all.config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
+        self.all.config(font=('Arial', 14), highlightbackground="White", highlightcolor="White")
         self.all.pack(fill="x")
 
         self.recent = Button(self.menu, text="By Date", bg="Black", fg="White", height="1", command=lambda: self.stuffConstruct(order="date", reCreate=1))
-        self.recent.config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
+        self.recent.config(font=('Arial', 14), highlightbackground="White", highlightcolor="White")
         self.recent.pack(fill="x")
 
-        Label(self.menu, text="Playlists", bg="Black", fg="White", height="5", font=('Arial', 20),
-                    highlightbackground="White", highlightcolor="White").pack(fill="x")
+        Label(self.menu, text="Playlists", bg="Black", fg="White", height="3", font=('Arial', 18),
+                    highlightbackground="White", highlightcolor="White").pack(fill="x", pady=2)
 
         # Playlists
-        self.add = Button(self.menu, text="+ Playlist", bg="Black", fg="Gray", height="1", command=AddPlaylist)
-        self.add.config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
+        self.add = Button(self.menu, text="+ Playlist", bg="Black", fg="White", height="1", command=AddPlaylist)
+        self.add.config(font=('Arial', 14), highlightbackground="White", highlightcolor="White")
         self.add.pack(fill="x")
 
         self.playlistsConstruct(playlistName, self.posPlaylists)
+
+        self.config = Button(self.menu, text='Configuration', bg="Black", fg="White", height="1",
+                        command=Config, font=('Arial', 14), highlightbackground="White", highlightcolor="White")
+        self.config.pack(fill="x", side=BOTTOM)
 
     def playlistsConstruct(self, playlistName='', start=0):
         try:
@@ -83,31 +88,31 @@ class MainApp:
 
         up = Button(self.playlistsFrame, text=unescape('&#10506;'), bg="Black", fg="White",
                     command=lambda: self.changeMenuPosition(playlistName, -1))
-        up.pack(fill="x")
+        up.pack(fill="x", pady=1)
         if start == 0:
             up.config(state=DISABLED)
 
         # For with the playlists
         self.playButtons = []
 
-        if len(self.playlists[0]) > (6+start):
-            max = start + 6
+        if len(self.playlists[0]) > (7+start):
+            max = start + 7
         else:
             max = len(self.playlists[0])
 
-        for i in range(0, 6):
+        for i in range(0, 7):
             self.playButtons.append(Button(self.playlistsFrame, text=f"{self.playlists[0][i+start]}", bg="Black", fg="White", height="1",
                                         command=lambda i=i: self.stuffConstruct(self.playlists[0][i+start], reCreate=1)))
-            self.playButtons[i].config(font=('Arial', 16), highlightbackground="White", highlightcolor="White")
+            self.playButtons[i].config(font=('Arial', 12), highlightbackground="White", highlightcolor="White")
             if playlistName == self.playlists[0][i+start]:
                 self.playButtons[i].config(bg="Gray")
             self.playButtons[i].pack(fill="x")
 
-        if len(self.playlists[0]) > 6:
+        if len(self.playlists[0]) > 7:
             bt = Button(self.playlistsFrame, text=unescape('&#10507;'), bg="Black", fg="White",
                         command=lambda: self.changeMenuPosition(playlistName, 1))
-            bt.pack(fill="x")
-            if (start + 6) >= len(self.playlists[0]):
+            bt.pack(fill="x", pady=1)
+            if (start + 7) >= len(self.playlists[0]):
                 bt.config(state=DISABLED)
 
     def changeMenuPosition(self, playlistName, change):
@@ -537,6 +542,30 @@ class AddPlaylist(MainApp):
             main()
         except Exception as e:
             messagebox.showerror('Error', f"A error has happened:\n{e}")
+
+class Config(MainApp):
+    def __init__(self):
+        self.screen = Toplevel()
+        self.screen.title('Configuration')
+        self.screen.iconbitmap('./images/music-logo.ico')
+        self.screen.geometry(f"{int(app.sizes[0]*0.5)}x{int(app.sizes[1]*0.6)}+{int(app.sizes[0]*0.2)}+{int(app.sizes[1]*0.2)}")
+        self.screen.resizable(0,0)
+
+        self.tabs = ttk.Notebook(self.screen)
+        self.tabs.pack(fill=BOTH, expand=True)
+
+        self.general()
+        self.musicsFolder()
+
+    def general(self):
+        self.generalFrame = Frame(self.tabs, bg="black")
+        self.generalFrame.pack(fill=BOTH, expand=True)
+        self.tabs.add(self.generalFrame, text="General Config")
+
+    def musicsFolder(self):
+        self.musicFrame = Frame(self.tabs, bg="gray")
+        self.musicFrame.pack(fill=BOTH, expand=True)
+        self.tabs.add(self.musicFrame, text="Music Folders")
 
 
 def main():
