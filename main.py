@@ -25,6 +25,7 @@ class MainApp:
         self.musicPos = 0
         self.music = ''
         self.musicsList = []
+        self.preLoadedList = files.preLoad()
         self.playlists = playlist.loadPlaylists()
         self.posPlaylists = 0
         self.backupList = []
@@ -171,7 +172,7 @@ class MainApp:
         if playlistName:
             self.playlists = playlist.loadPlaylists()
             playlistPos = list(self.playlists[0]).index(playlistName)
-            self.musicsList = files.findMusics(self.playlists[1][playlistPos], order)
+            self.musicsList = files.findMusics(self.playlists[1][playlistPos], order, preData=self.preLoadedList)
 
             # Config buttons of playlist
             Button(self.stuff, text="Edit Playlist", font=('Arial', 16), width=20, bg='#5379b5', fg="White",
@@ -182,7 +183,7 @@ class MainApp:
             trash.photo = img
             trash.grid(row=1, column=1, pady = 10)
         else:
-            self.musicsList = files.findMusics('', order)
+            self.musicsList = files.findMusics('', order, preData=self.preLoadedList)
 
         self.musicsWidgets = {}
         for n in range(0, len(self.musicsList)):
@@ -305,7 +306,7 @@ class MainApp:
 
             self.musicsWidgets[f"{path}"].config(bg="gray")
 
-            audio.playMusic(f"./musics/{path}.mp3", unpause, firstTime)
+            audio.playMusic(f"{files.getRealPath(path, folders=self.preLoadedList[1][1])}\\{path}.mp3", unpause, firstTime)
 
             self.music = path # Put the music selected
 
@@ -475,7 +476,7 @@ class AddPlaylist(MainApp):
         self.screen.resizable(0,0)
         self.screen.config(bg="Black")
 
-        self.musics = files.findMusics()
+        self.musics = files.findMusics(preData=app.preLoadedList)
         self.playlistEdit = editPlaylist
 
         if not editPlaylist:
@@ -491,7 +492,7 @@ class AddPlaylist(MainApp):
         if editPlaylist:
             # List of already musics in the playlist
             self.playlists = playlist.loadPlaylists()
-            self.musicsList = files.findMusics(self.playlists[1][list(self.playlists[0]).index(editPlaylist)])
+            self.musicsList = files.findMusics(self.playlists[1][list(self.playlists[0]).index(editPlaylist)], preData=app.preLoadedList)
 
             self.box.selection_clear(0, END)
             for music in self.musicsList:
@@ -567,6 +568,51 @@ class Config(MainApp):
         self.musicFrame.pack(fill=BOTH, expand=True)
         self.tabs.add(self.musicFrame, text="Music Folders")
 
+        Label(self.musicFrame, text="Add Folders", font=('Arial', 14), bg="Gray", fg="Black").grid(row=0, column=0, columnspan=2)
+
+        Label(self.musicFrame, text="Name: ", font=('Arial', 11), bg="gray", fg="white").grid(row=1, column=0, pady=2, padx=1)
+        self.name = Entry(self.musicFrame)
+        self.name.grid(row=1, column=1, pady=2, padx=1)
+
+        Label(self.musicFrame, text="Local address: ", font=('Arial', 11), bg="gray", fg="white").grid(row=2, column=0, pady=2, padx=1)
+        self.local = Entry(self.musicFrame)
+        self.local.grid(row=2, column=1, pady=2, padx=1)
+        Button(self.musicFrame, text="Test local", font=('Arial', 10), bg="Black", fg="White",
+                    command=lambda: files.testFolder(self.local.get())).grid(row=2, column=2, pady=2, padx=3)
+
+        Button(self.musicFrame, text="Create", font=('Arial', 10), bg="Black", fg="White",
+                    command=lambda: self.addFolder(self.name.get(), self.local.get())).grid(row=3, column=1, pady=2, padx=4)
+
+        # View Actual Folders
+
+        Label(self.musicFrame, text="Folders", font=('Arial', 14), bg="Gray", fg="Black").grid(row=0, column=4)
+        folds = files.readFolders()
+        self.list = Frame(self.musicFrame, highlightbackground="black", highlightthickness=1, bg="White")
+        self.list.grid(row=1, column=3, columnspan=3, pady=5, padx=15)
+        if len(folds[0]) != 1:
+            for i in range(1, len(folds[0])):
+                Label(self.list, text=folds[0][i], font=('Arial', 8), bg="White").grid(row=i, column=3, pady=5, padx=15)
+                Label(self.list, text=folds[1][i], font=('Arial', 5), bg="White").grid(row=i, column=4, pady=5, padx=2)
+                Button(self.list, text='Delete', font=('Arial', 10), bg="Red", fg="White",
+                            command=lambda a=i: self.delFolder(folds[0][a])).grid(row=i, column=5, pady=5, padx=2)
+
+    def addFolder(self, name, path):
+        try:
+            files.addFolder(name, path)
+            messagebox.showinfo('Succeed', 'Folder added to musics folders list.')
+            self.musicFrame.destroy()
+            self.musicsFolder()
+        except Exception as e:
+            messagebox.showerror('Error', f'Failed to add the folder. Error:\n{e}')
+
+    def delFolder(self, name):
+        try:
+            files.delFolder(name)
+            messagebox.showinfo('Succeed', 'Folder deleted from the musics folders list.')
+            self.musicFrame.destroy()
+            self.musicsFolder()
+        except Exception as e:
+            messagebox.showerror('Error', f'Failed to delete the folder. Error: \n{e}')
 
 def main():
     global app, root

@@ -20,6 +20,10 @@ Just 4 fun.
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
 
+### 1.4.1 (Folders)
+- Full Folders configuration
+- "Pre loaded" information
+
 ### 1.4 (Basic Configuration)
 - Basic configuration screen
 - Small upgrades in the Menu
