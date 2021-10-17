@@ -89,6 +89,3 @@ def renameMusic(path, new):
 
 def deleteMusic(path):
     os.remove(f"{getRealPath(path)}\\{path}.mp3")
-
-def testFolder(path):
-    os.startfile(os.path.realpath(path))

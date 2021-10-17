@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import messagebox, ttk
+from tkinter import messagebox, ttk, filedialog
 from PIL import Image, ImageTk
 from functions import music as audio
 from functions import files
@@ -74,9 +74,18 @@ class MainApp:
 
         self.playlistsConstruct(playlistName, self.posPlaylists)
 
-        self.config = Button(self.menu, text='Configuration', bg="Black", fg="White", height="1",
+        self.config = Button(self.menu, text=unescape('&#9881;'), bg="Black", fg="White", height="1",
                         command=Config, font=('Arial', 14), highlightbackground="White", highlightcolor="White")
         self.config.pack(fill="x", side=BOTTOM)
+
+        # Restart Button above config
+        self.restartBt = Button(self.menu, text=unescape('&#8634;'), bg="Black", fg="White", height="1",
+                                command=self.restart, font=('Arial', 14), highlightbackground="White", highlightcolor="White")
+        self.restartBt.pack(fill="x", side=BOTTOM)
+
+    def restart(self):
+        self.master.destroy()
+        main()
 
     def playlistsConstruct(self, playlistName='', start=0):
         try:
@@ -399,6 +408,10 @@ class MainApp:
         if (float(value)-actual) > 2.5 or (float(value)-actual) < -2.5: # If changed sufficient
             audio.changeMusicPosition(times[1]*(float(value)/100)*1000)
 
+    def putScreen(self,screen): # Put the screen in top of the computer window
+        screen.withdraw()
+        screen.deiconify() # Put
+
 class Edit(MainApp):
     def __init__(self, music):
         self.screen = Toplevel()
@@ -439,8 +452,9 @@ class Edit(MainApp):
         self.back.photo = img
         self.back.pack(pady=1, padx=10, fill=X, expand=True)
         Label(self.frame, text=f"{self.music}", font=('Arial', 8), fg="White", bg="Black").pack(pady=5, padx=10, fill=X, expand=True)
-        self.newName = Entry(self.frame, font=('Arial', 18))
+        self.newName = Entry(self.frame, font=('Arial', 8))
         self.newName.pack(pady=5, padx=10, fill=X, expand=True)
+        self.newName.insert(0, self.music)
         Button(self.frame, text="Rename Music", font=('Arial', 18), fg="White", bg="Black",
                     command=lambda: self.rename(self.newName.get())).pack(pady=5, padx=10, fill=X, expand=True)
 
@@ -577,8 +591,8 @@ class Config(MainApp):
         Label(self.musicFrame, text="Local address: ", font=('Arial', 11), bg="gray", fg="white").grid(row=2, column=0, pady=2, padx=1)
         self.local = Entry(self.musicFrame)
         self.local.grid(row=2, column=1, pady=2, padx=1)
-        Button(self.musicFrame, text="Test local", font=('Arial', 10), bg="Black", fg="White",
-                    command=lambda: files.testFolder(self.local.get())).grid(row=2, column=2, pady=2, padx=3)
+        Button(self.musicFrame, text="Find folder", font=('Arial', 10), bg="Black", fg="White",
+                    command=self.findFolder).grid(row=2, column=2, pady=2, padx=3)
 
         Button(self.musicFrame, text="Create", font=('Arial', 10), bg="Black", fg="White",
                     command=lambda: self.addFolder(self.name.get(), self.local.get())).grid(row=3, column=1, pady=2, padx=4)
@@ -602,15 +616,23 @@ class Config(MainApp):
             messagebox.showinfo('Succeed', 'Folder added to musics folders list.')
             self.musicFrame.destroy()
             self.musicsFolder()
+            app.putScreen(self.screen)
         except Exception as e:
             messagebox.showerror('Error', f'Failed to add the folder. Error:\n{e}')
 
+    def findFolder(self):
+        self.local.delete(0, END)
+        self.local.insert(0, filedialog.askdirectory())
+        app.putScreen(self.screen)
+
     def delFolder(self, name):
         try:
-            files.delFolder(name)
-            messagebox.showinfo('Succeed', 'Folder deleted from the musics folders list.')
-            self.musicFrame.destroy()
-            self.musicsFolder()
+            if messagebox.askyesno('Delete', 'Do you want to delete this folder from the folders list?'):
+                files.delFolder(name)
+                messagebox.showinfo('Succeed', 'Folder deleted from the musics folders list.')
+                self.musicFrame.destroy()
+                self.musicsFolder()
+                app.putScreen(self.screen)
         except Exception as e:
             messagebox.showerror('Error', f'Failed to delete the folder. Error: \n{e}')
 

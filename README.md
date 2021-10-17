@@ -20,6 +20,13 @@ Just 4 fun.
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
 
+### 1.4.2 (Minor upgrades)
+- Restart Button
+- Upgrade into delete music Folder feature (yes or no)
+- Upgrade into create music Folder feature (select folder)
+- Put the window in the screen after a function (creation, delete of music folders)
+- Music name in the rename pre put in Entry
+
 ### 1.4.1 (Folders)
 - Full Folders configuration
 - "Pre loaded" information
