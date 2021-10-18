@@ -21,11 +21,11 @@ class MainApp:
 
         # Important variables
         self.playing = 0
-        self.volume = 50
         self.musicPos = 0
         self.music = ''
         self.musicsList = []
         self.preLoadedList = files.preLoad()
+        self.volume = int(self.preLoadedList[2])
         self.playlists = playlist.loadPlaylists()
         self.posPlaylists = 0
         self.backupList = []
@@ -53,7 +53,7 @@ class MainApp:
         self.master.bind("<space>", self.space)
 
     def menuConstruct(self, playlistName=''):
-        menuSymbol = Label(self.menu, text=unescape("&#9776;"), bg="Black", fg="White", height="1", font=('Arial', 16))
+        menuSymbol = Label(self.menu, text=unescape("&#9776;"), bg="Black", fg="#2e99db", height="1", font=('Arial', 16))
         menuSymbol.pack(fill="x")
 
         self.all = Button(self.menu, text="All Songs", bg="Black", fg="White", height="1", command=lambda: self.stuffConstruct(order="char", reCreate=1))
@@ -171,13 +171,6 @@ class MainApp:
         self.stuff = createScrollableFrame(self.mainStuff)
         self.stuff.config(background="#353638")
 
-        # Image loading
-        path = r"./images/all Songs.jpg"
-        img = ImageTk.PhotoImage(Image.open(path).resize((int(self.sizes[0]*0.8*0.75), int(self.sizes[1]*0.8*0.2)), Image.ANTIALIAS))
-        panel = Label(self.stuff, image=img, border="0.1")
-        panel.photo = img
-        panel.grid(row=0, column=0, columnspan=2, pady=10)
-
         if playlistName:
             self.playlists = playlist.loadPlaylists()
             playlistPos = list(self.playlists[0]).index(playlistName)
@@ -193,25 +186,29 @@ class MainApp:
             trash.grid(row=1, column=1, pady = 10)
         else:
             self.musicsList = files.findMusics('', order, preData=self.preLoadedList)
+            Label(self.stuff, text="", height=1, bg="#353638").grid(row=0, column=0)
+            Label(self.stuff, text="", height=1, bg="#353638").grid(row=1, column=0)
 
         self.musicsWidgets = {}
         for n in range(0, len(self.musicsList)):
             try:
+                i = n+2
+                if not playlistName: i += 2
                 self.musicsWidgets[f"{self.musicsList[n]}"] = Button(self.stuff, text=self.musicsList[n], font=('Arial', 12),
-                                        command=lambda i=self.musicsList[n]: self.playM(i), bg="Black", fg="White",
-                                        width=80, height=1)
-                self.musicsWidgets[f"{self.musicsList[n]}"].grid(row=n+2, column=0, padx=10)
+                                        command=lambda i=self.musicsList[n]: self.playM(i), bg="#141414", fg="White",
+                                        width=76, height=1)
+                self.musicsWidgets[f"{self.musicsList[n]}"].grid(row=i, column=0, padx=35)
 
                 path = r"./images/see more.png"
                 img = ImageTk.PhotoImage(Image.open(path).resize((int(self.sizes[0]*0.8*0.05), int(self.sizes[1]*0.8*0.05)), Image.ANTIALIAS))
                 panel = Button(self.stuff, image=img, border="0.1", command=lambda i=self.musicsList[n]: Edit(i))
                 panel.photo = img
-                panel.grid(row=n+2, column=1, padx=30)
+                panel.grid(row=i, column=1, padx=20)
             except Exception as e:
                 print(f'There was an error to load the musics.\n{e}')
 
-        Label(self.stuff, text="", height=1, bg="#353638").grid(row=len(self.musicsList)+2, column=0)
-        Label(self.stuff, text="", height=1, bg="#353638").grid(row=len(self.musicsList)+3, column=0)
+        Label(self.stuff, text="", height=1, bg="#353638").grid(row=len(self.musicsList)+4, column=0)
+        Label(self.stuff, text="", height=1, bg="#353638").grid(row=len(self.musicsList)+5, column=0)
 
 
     def playerConstruct(self):
@@ -274,7 +271,7 @@ class MainApp:
         self.volumeS.pack()
         self.volumeS.place(bordermode=OUTSIDE, anchor="nw", height=str(int(self.sizes[1]*0.8*0.2*0.2)),
                             width=str(int(self.sizes[0]*0.8*0.8*0.2)), relx=0.75, rely=0.4)
-        self.volumeS.set(50)
+        self.volumeS.set(self.volume)
 
 
     def check(self, first=False):
@@ -573,16 +570,60 @@ class Config(MainApp):
         self.musicsFolder()
 
     def general(self):
-        self.generalFrame = Frame(self.tabs, bg="black")
+        self.vDef = IntVar()
+
+        self.generalFrame = Frame(self.tabs, bg="gray")
         self.generalFrame.pack(fill=BOTH, expand=True)
         self.tabs.add(self.generalFrame, text="General Config")
+
+        # Default Volume
+        self.volumeLabel = Label(self.generalFrame, text="Default Volume:", font=('Arial', 12), bg='#ababab', fg='White')
+        self.volumeLabel.pack()
+        self.volumeLabel.place(bordermode=OUTSIDE, anchor="nw", height=str(int(app.sizes[1]*0.6*0.1)),
+                            width=str(int(app.sizes[0]*0.5*0.2)), relx=0.01, rely=0.05)
+        self.volScale = Scale(self.generalFrame, from_=0, to=100, orient=HORIZONTAL, fg='white', bg='gray'
+                                , variable=self.vDef)
+        self.volScale.pack()
+        self.volScale.place(bordermode=OUTSIDE, anchor="nw", height=str(int(app.sizes[1]*0.6*0.1)),
+                            width=str(int(app.sizes[0]*0.5*0.25)), relx=0.26, rely=0.05)
+        self.vDef.set(app.preLoadedList[2]) # Get pre volume saved
+
+        # Theme
+        self.themeLabel = Label(self.generalFrame, text="Theme:", font=('Arial', 12), bg='#ababab', fg='White')
+        self.themeLabel.pack()
+        self.themeLabel.place(bordermode=OUTSIDE, anchor="nw", height=str(int(app.sizes[1]*0.6*0.1)),
+                            width=str(int(app.sizes[0]*0.5*0.2)), relx=0.01, rely=0.2)
+        # List box
+
+        # Restaure button
+        self.restaureButton = Button(self.generalFrame, text="Restaure default settings", command=self.restaure, font=('Arial', 11), bg='#b5ac02', fg='white')
+        self.restaureButton.pack()
+        self.restaureButton.place(bordermode=OUTSIDE, anchor="nw", height=str(int(app.sizes[1]*0.6*0.075)),
+                                width=str(int(app.sizes[0]*0.5*0.3)), relx=0.58, rely=0.905)
+
+        # Apply button
+        self.apply = Button(self.generalFrame, text="Apply", command=self.save, font=('Arial', 11), bg='#41b000', fg='white')
+        self.apply.pack()
+        self.apply.place(bordermode=OUTSIDE, anchor="nw", height=str(int(app.sizes[1]*0.6*0.075)),
+                        width=str(int(app.sizes[0]*0.5*0.1)), relx=0.89, rely=0.905)
+
+    def save(self):
+        try:
+            files.saveVolume(self.vDef.get())
+            messagebox.showinfo('Saved', 'Default informations are saved now.')
+        except Exception as e:
+            messagebox.showerror('Error', f'Default informations not saved.\n{e}')
+
+    def restaure(self):
+        self.vDef.set(50)
+        self.save() # Change to save all configs function
 
     def musicsFolder(self):
         self.musicFrame = Frame(self.tabs, bg="gray")
         self.musicFrame.pack(fill=BOTH, expand=True)
         self.tabs.add(self.musicFrame, text="Music Folders")
 
-        Label(self.musicFrame, text="Add Folders", font=('Arial', 14), bg="Gray", fg="Black").grid(row=0, column=0, columnspan=2)
+        Label(self.musicFrame, text="Add Folders", font=('Arial', 14), bg="Gray", fg="Black").grid(row=0, column=0, columnspan=2, pady=15)
 
         Label(self.musicFrame, text="Name: ", font=('Arial', 11), bg="gray", fg="white").grid(row=1, column=0, pady=2, padx=1)
         self.name = Entry(self.musicFrame)
@@ -599,7 +640,7 @@ class Config(MainApp):
 
         # View Actual Folders
 
-        Label(self.musicFrame, text="Folders", font=('Arial', 14), bg="Gray", fg="Black").grid(row=0, column=4)
+        Label(self.musicFrame, text="Folders", font=('Arial', 14), bg="Gray", fg="Black").grid(row=0, column=4, pady=15)
         folds = files.readFolders()
         self.list = Frame(self.musicFrame, highlightbackground="black", highlightthickness=1, bg="White")
         self.list.grid(row=1, column=3, columnspan=3, pady=5, padx=15)

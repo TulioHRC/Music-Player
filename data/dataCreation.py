@@ -13,4 +13,10 @@ cur = con.cursor()
 #cur.execute('INSERT INTO Folders (Name, Path) VALUES (?, ?)', ('Default', 'musics/'))
 #con.commit()
 
+# Default Volume
+#cur.execute('DROP TABLE IF EXISTS Volume')
+#cur.execute('CREATE TABLE Volume (Value TEXT)')
+#cur.execute('INSERT INTO Volume (Value) VALUES (?)', ('50',))
+#con.commit()
+
 con.close()

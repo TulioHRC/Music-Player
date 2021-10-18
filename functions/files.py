@@ -34,10 +34,34 @@ def delFolder(name):
 
     cur.close()
 
+# Default Volume Part
+
+def readVolume():
+    con = sqlite3.connect('./data/data.sqlite')
+    cur = con.cursor()
+
+    df = pd.read_sql_query('SELECT * FROM Volume', con)
+
+    cur.close()
+
+    return df['Value'].values[0]
+
+def saveVolume(value):
+    con = sqlite3.connect("./data/data.sqlite")
+    cur = con.cursor()
+
+    cur.execute('DROP TABLE IF EXISTS Volume')
+    cur.execute('CREATE TABLE Volume (Value TEXT)')
+    cur.execute('INSERT INTO Volume (Value) VALUES (?)', (str(value),))
+    con.commit()
+
+    cur.close()
+
 # Pre Load Part
 
 def preLoad():
     folders = readFolders()
+    volume = int(readVolume())
 
     musics = set()
 
@@ -46,7 +70,7 @@ def preLoad():
             if m.split('.')[-1] == 'mp3': # Only accept .mp3
                 musics.add(m[:-4]) # Take off extension (.mp3)
 
-    return [list(musics), folders]
+    return [list(musics), folders, volume]
 
 # Musics part
 
