@@ -8,10 +8,6 @@ While I was using the older version, I had some problems, like very slow in .exe
 - Playlists (like the older, but prettier)
 - Filter to songs (when new song is added you have the possibility to add some caracteristics, like type, singer, etc. To use that info in a filter)
 
-### Observations and Possible Upgrades
-- There will be two apps, one will be the full version, and the other will be the lite version
-- Function to create buttons more easily
-
 ### Lite version
 This version will be for faster application, will not have downloads, and some others features
 
@@ -19,6 +15,9 @@ Just 4 fun.
 
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
+
+### 1.5 (Search bar)
+- Search by name in All musics
 
 ### 1.4.3 (General Configuration)
 - Basic General configuration (volume, restaure, apply)
