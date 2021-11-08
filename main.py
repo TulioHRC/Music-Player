@@ -129,7 +129,9 @@ class MainApp:
         self.posPlaylists += change
         self.playlistsConstruct(playlistName, self.posPlaylists)
 
-    def stuffConstruct(self, playlistName="", order="char", reCreate=""): # Will be "reconstructed" many times
+    def stuffConstruct(self, playlistName="", order="char", reCreate="", search=0): # Will be "reconstructed" many times
+        mainPage = 0 # Will be 1 if it's the main music page
+
         if reCreate:
             try:
                 self.mainStuff.destroy()
@@ -144,6 +146,7 @@ class MainApp:
             if order=="char":
                 self.recent.config(bg="Black")
                 self.all.config(bg="Gray")
+                mainPage = 1 # Main music page
             else:
                 self.recent.config(bg="Gray")
                 self.all.config(bg="Black")
@@ -186,11 +189,20 @@ class MainApp:
             trash.grid(row=1, column=1, pady = 10)
         else:
             self.musicsList = files.findMusics('', order, preData=self.preLoadedList)
-            Label(self.stuff, text="", height=1, bg="#353638").grid(row=0, column=0)
-            Label(self.stuff, text="", height=1, bg="#353638").grid(row=1, column=0)
+            if mainPage: # Search tools load
+                self.search = Entry(self.stuff, font=('Arial', 18), width=52)
+                self.search.grid(row=0, column=0, pady=30)
+                Button(self.stuff, text="Search", bg="black", fg="white", width=6, height=1, command=lambda:self.stuffConstruct(search=self.search.get()),
+                    font=("Arial", 12)).grid(row=0, column=1, pady=30)
+            else:
+                Label(self.stuff, text="", height=1, bg="#353638").grid(row=0, column=0)
+                Label(self.stuff, text="", height=1, bg="#353638").grid(row=1, column=0)
 
         self.musicsWidgets = {}
         for n in range(0, len(self.musicsList)):
+            if search:
+                if not search in self.musicsList[n]:
+                    continue # skips this song in the loop
             try:
                 i = n+2
                 if not playlistName: i += 2
