@@ -19,6 +19,8 @@ Remembering that the versions above 1.0.0 will restart all the project
 ### 1.5 (Search bar)
 - Search by name in All musics
 
+![teste](https://user-images.githubusercontent.com/62257920/140831905-5e36f506-12e8-483b-a73b-4c43fe812adc.png)
+
 ### 1.4.3 (General Configuration)
 - Basic General configuration (volume, restaure, apply)
 - Style of configuration screen
