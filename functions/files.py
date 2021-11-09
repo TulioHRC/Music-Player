@@ -59,7 +59,7 @@ def saveVolume(value):
 
 # Pre Load Part
 
-def preLoad
+def preLoad():
     folders = readFolders()
     volume = int(readVolume())
 

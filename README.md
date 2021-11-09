@@ -20,6 +20,7 @@ Remembering that the versions above 1.0.0 will restart all the project
 - Put commentaries in all the code
 - Restarted the databases and the musics folder, to anyone use it in its way
 - Fixed an small error of search, when there's no musics
+- Fixed error of no playlists found
 
 ### 1.5 (Search bar)
 - Search by name in All musics

@@ -114,7 +114,11 @@ class MainApp:
         else:
             max = len(self.playlists[0])
 
-        for i in range(0, 7):
+        if len(self.playlists[0]) < 7:
+            rangeMax = len(self.playlists[0])
+        else: rangeMax = 7
+
+        for i in range(0, rangeMax):
             self.playButtons.append(Button(self.playlistsFrame, text=f"{self.playlists[0][i+start]}", bg="Black", fg="White", height="1",
                                         command=lambda i=i: self.stuffConstruct(self.playlists[0][i+start], reCreate=1)))
             self.playButtons[i].config(font=('Arial', 12), highlightbackground="White", highlightcolor="White")
