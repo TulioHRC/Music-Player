@@ -16,6 +16,11 @@ Just 4 fun.
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
 
+### 1.5.1 (Misc update)
+- Put commentaries in all the code
+- Restarted the databases and the musics folder, to anyone use it in its way
+- Fixed an small error of search, when there's no musics
+
 ### 1.5 (Search bar)
 - Search by name in All musics
 
@@ -53,7 +58,7 @@ Remembering that the versions above 1.0.0 will restart all the project
 ![image](https://user-images.githubusercontent.com/62257920/134737213-5f40ec6e-5022-4dd5-9718-eaf2997be5cd.png)
 - Music time position bar
 - Improved scales of volume and time bar
-- Fixxed error of trying to change volume
+- Fixed error of trying to change volume
 - Convertor of seconds to '00:00' format
 
 ### 1.2.2 (Edit Musics)
@@ -73,7 +78,6 @@ I created:
 - Menu Frame (all, recent, playlists)
 - Changed the music module, (tkinter -> VLC) Because of the size of tkinter, is much bigger than VLC module, and VLC don't bugs in my pc, like Tkinter.
 - Playlists settings (delete and create)
-
 
 ### 1.1.1 (Audio Functions, create all the audio functions that I will use, and test it)
 Created the function to play/unpause, pause and check if the music is playing.

@@ -59,7 +59,7 @@ def saveVolume(value):
 
 # Pre Load Part
 
-def preLoad():
+def preLoad
     folders = readFolders()
     volume = int(readVolume())
 
@@ -100,7 +100,7 @@ def findMusics(playlist="", order="char", preData=''):
 
     return musics
 
-def getRealPath(name, folders=''):
+def getRealPath(name, folders=''): # Get real music path
     if isinstance(folders, str): folders = readFolders()[1]
     res = './musics/'
     for folder in folders:
