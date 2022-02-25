@@ -8,6 +8,9 @@ While I was using the older version, I had some problems, like very slow in .exe
 - Playlists (like the older, but prettier)
 - Filter to songs (when new song is added you have the possibility to add some caracteristics, like type, singer, etc. To use that info in a filter)
 
+### You need:
+- Install VLC of 32 bits and 64 bits for your pc
+
 ### Lite version
 This version will be for faster application, will not have downloads, and some others features
 
@@ -15,6 +18,9 @@ Just 4 fun.
 
 ## LOG
 Remembering that the versions above 1.0.0 will restart all the project
+
+### 1.5.2 (W10 update)
+- DLL fix for VLC
 
 ### 1.5.1 (Misc update)
 - Put commentaries in all the code

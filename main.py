@@ -1,3 +1,10 @@
+# DLL Fix
+import os
+os.add_dll_directory(r'C:\Program Files\VideoLAN\VLC')
+
+import vlc
+
+# Imports
 from tkinter import *
 from tkinter import messagebox, ttk, filedialog
 from PIL import Image, ImageTk
