@@ -10,6 +10,7 @@ While I was using the older version, I had some problems, like very slow in .exe
 
 ### You need:
 - Install VLC of 32 bits and 64 bits for your pc
+- pip install python-vlc pandas
 
 ### Lite version
 This version will be for faster application, will not have downloads, and some others features
