@@ -336,7 +336,7 @@ class MainApp:
             if self.music == path:
                 unpause = 1
             elif firstTime != 1:
-                self.musicsWidgets[f"{self.music}"].config(bg="black")
+                self.musicsWidgets[f"{self.music}"].config(bg="#141414") # Re-put the background color in the played music
 
             self.musicsWidgets[f"{path}"].config(bg="gray") # Gray background in the playing music
 
@@ -376,6 +376,7 @@ class MainApp:
     def change(self, factor): # Change the music
         try:
             self.pause()
+
             positionNow = self.musicsList.index(self.music) + factor # Next/before Position
             if(positionNow == len(self.musicsList)):
                 self.playM(self.musicsList[0]) # Play first music if position is after the last music

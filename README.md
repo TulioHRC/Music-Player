@@ -26,6 +26,12 @@ Observation: While I was using the older version, I had some problems, like very
 
 ## LOG
 
+### 1.6.1v (Ready-to-use update)
+- .gitignore template
+- Fix played songs background error
+- Examples songs
+- Restarted databases files (for new users)
+
 ### 1.6v (Revolution update)
 - Name changed
 - ReadME big update
