@@ -22,9 +22,13 @@ Observation: While I was using the older version, I had some problems, like very
 
 ### You need to use (by python):
 - Install VLC of 32 bits and 64 bits for your pc
-- pip install python-vlc pandas
+- pip install python-vlc pandas pillow
 
 ## LOG
+
+### 1.6.2v (EXE)
+- .exe created (using venv and pyinstaller)
+- .gitignore update
 
 ### 1.6.1v (Ready-to-use update)
 - .gitignore template
