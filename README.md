@@ -20,9 +20,9 @@ Observation: While I was using the older version, I had some problems, like very
 - Online playing (like discord bots)
 - Get others apps playlists and save to use it
 
-### You need to use (by python):
+### You need to use:
 - Install VLC of 32 bits and 64 bits for your pc
-- pip install python-vlc pandas pillow
+- pip install python-vlc pandas pillow (by python)
 
 ## LOG
 
