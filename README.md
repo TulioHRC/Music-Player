@@ -16,3 +16,6 @@ Example using:
 
 Possibly upgrades:
 - Menu to delete musics
+
+
+Observation: Yes I created a .exe after 1 year, sorry, I was just testing, and I'm gonna put it in the repository anyways.
