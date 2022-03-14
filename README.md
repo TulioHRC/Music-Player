@@ -27,6 +27,9 @@ Observation: While I was using the older version, I had some problems, like very
 
 ## LOG
 
+### 1.6.4v (Hot fix)
+- Databases reset
+
 ### 1.6.3v (EXE fix - Pygame return)
 - Fixing .exe (didn't working because of python-vlc, so the library will not be used anymore)
 - Pygame works in Windows 10, only has problems in Windows 7 (sound bugs)
