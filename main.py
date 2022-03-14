@@ -1,8 +1,3 @@
-# DLL Fix
-import os
-os.add_dll_directory(r'C:\Program Files\VideoLAN\VLC')
-
-import vlc
 
 # Imports
 from tkinter import *
@@ -32,6 +27,8 @@ class MainApp:
         self.musicsList = []
         self.musicPos = 0 # Music position in the musics list
         self.music = ''
+        self.musicFile = ''
+        self.changes = 0 # Changes in the music timer
         self.preLoadedList = files.preLoad() # Pre load data
         self.volume = int(self.preLoadedList[2])
         self.playlists = playlist.loadPlaylists()
@@ -309,17 +306,18 @@ class MainApp:
     # Player functions
     def check(self, first=False):
         # Check if the music is playing or not (to auto advance to the next music)
+        print(audio.getTimes(self.musicFile, self.changes)[0])
         if self.playing == 1 and audio.checkMusic() == 0:
             if not first: # Load more slow to avoid errors
                 root.after(500, self.change(1))
 
         if self.playing != 0: # If it's playing
             if self.fTime['text'] == '00:00': # Configure final time label
-                self.fTime['text'] = conversor.secToTimer(audio.getTimes()[1])
+                self.fTime['text'] = conversor.secToTimer(audio.getTimes(self.musicFile, self.changes)[1])
             else:
-                times = audio.getTimes()
+                times = audio.getTimes(self.musicFile, self.changes)
                 self.musicScale.set(round((times[0]*100/times[1]), 1))
-            self.sTime['text'] = conversor.secToTimer(audio.getTimes()[0]) # Changes actual music time label
+            self.sTime['text'] = conversor.secToTimer(audio.getTimes(self.musicFile, self.changes)[0]) # Changes actual music time label
             root.after(1000, self.check)
 
     def playM(self, path='', firstTime=0): # Play music Function
@@ -343,6 +341,7 @@ class MainApp:
             audio.playMusic(f"{files.getRealPath(path, folders=self.preLoadedList[1][1])}\\{path}.mp3", unpause, firstTime) # Play music
 
             self.music = path # Save the music selected
+            self.musicFile = f"{files.getRealPath(path, folders=self.preLoadedList[1][1])}\\{path}.mp3"
 
             # Changing Button and others widgets
             self.play["text"] = unescape(' &#9612;&#9612;')
@@ -414,10 +413,11 @@ class MainApp:
             self.random.place(bordermode=OUTSIDE, anchor="nw", relx=0.66, rely=0.375)
 
     def changePos(self, value): # Change music position in its time
-        times = audio.getTimes()
+        times = audio.getTimes(self.musicFile, self.changes)
         actual = round((times[0]*100/times[1]), 1)
         if (float(value)-actual) > 2.5 or (float(value)-actual) < -2.5: # If changed sufficient
-            audio.changeMusicPosition(times[1]*(float(value)/100)*1000)
+            audio.changeMusicPosition(times[1]*(float(value)/100))
+            self.changes += times[1]*(float(value)/100) - times[0]
 
     # Other functions
 
