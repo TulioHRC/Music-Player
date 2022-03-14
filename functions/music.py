@@ -21,7 +21,6 @@ def playMusic(PATH, unpause, firstTime=0):
 def changeMusicPosition(newTime):
     pauseMusic()
     mixer.music.set_pos(int(newTime))
-    #sleep(0.1)
     mixer.music.unpause()
 
 def pauseMusic():

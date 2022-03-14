@@ -22,14 +22,15 @@ Observation: While I was using the older version, I had some problems, like very
 - Get others apps playlists and save to use it
 
 ### You need to use (by python):
-- Install VLC of 32 bits and 64 bits for your pc
-- pip install python-vlc pandas pillow pygame mutagen
+- pip install pandas pillow pygame mutagen
 
 ## LOG
 
 ### 1.6.3v (EXE fix - Pygame return)
 - Fixing .exe (didn't working because of python-vlc, so the library will not be used anymore)
 - Pygame works in Windows 10, only has problems in Windows 7 (sound bugs)
+- Full conversion to pygame mixer
+- Created new .exe file and with icon
 
 ### 1.6.2v (EXE)
 - .exe created (using venv and pyinstaller)
