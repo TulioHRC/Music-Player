@@ -24,6 +24,7 @@ Observation: While I was using the older version, I had some problems, like very
 ### You need to use (by python):
 - pip install pandas pillow pygame mutagen
 
+
 ## LOG
 
 ### 1.6.3v (EXE fix - Pygame return)
