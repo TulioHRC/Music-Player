@@ -14,17 +14,24 @@ Observation: While I was using the older version, I had some problems, like very
 
 ### Future Goals <img align=center width=30 height=30 src="https://user-images.githubusercontent.com/62257920/157306127-9342c871-a1cd-43aa-bc80-48f1834e0871.png" alt="Goal">
 - .exe version
+- Change position more accurate # Maybe using the rewind (restart) and then setting the position
 - Create own icon
 - Save data on using (to use AI)
 - Download Musics
 - Online playing (like discord bots)
 - Get others apps playlists and save to use it
 
-### You need to use:
-- Install VLC of 32 bits and 64 bits for your pc
-- pip install python-vlc pandas pillow (by python)
+### You need to use (by python):
+- pip install pandas pillow pygame mutagen
+
 
 ## LOG
+
+### 1.6.3v (EXE fix - Pygame return)
+- Fixing .exe (didn't working because of python-vlc, so the library will not be used anymore)
+- Pygame works in Windows 10, only has problems in Windows 7 (sound bugs)
+- Full conversion to pygame mixer
+- Created new .exe file and with icon
 
 ### 1.6.2v (EXE)
 - .exe created (using venv and pyinstaller)
