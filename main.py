@@ -489,6 +489,8 @@ class Edit(MainApp):
     def rename(self, name): # Rename music function
         try:
             files.renameMusic(self.music, name)
+            # Renaming in the playlists
+            playlist.renameMusicPlaylist(self.music, name)
             messagebox.showinfo('Succeed', f'We changed the {self.music} to {name}!\nNow we are restarting the application...')
             app.master.destroy()
             main()

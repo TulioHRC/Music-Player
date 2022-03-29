@@ -27,6 +27,9 @@ Observation: While I was using the older version, I had some problems, like very
 
 ## LOG
 
+### 1.6.5v (Rename fix)
+- Renaming file and in the playlists
+
 ### 1.6.4v (Hot fix)
 - Databases reset
 

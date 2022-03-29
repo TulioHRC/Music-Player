@@ -1,7 +1,7 @@
 import sqlite3
 import pandas as pd
 
-con = sqlite3.connect('./data/data.sqlite')
+con = sqlite3.connect('./data/data - Copia.sqlite')
 cur = con.cursor()
 
 df = pd.read_sql_query("SELECT * from Playlists", con)

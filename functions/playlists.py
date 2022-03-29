@@ -13,7 +13,9 @@ def createPlaylist(name, musicsList):
     cur.close()
 
 def updatePlaylist(name, musicsList):
-    musics = ';'.join(musicsList)
+    print(musicsList)
+    musics = ';'.join(list(musicsList))
+    print(musics)
 
     con = sqlite3.connect("./data/data.sqlite")
     cur = con.cursor()
@@ -44,3 +46,12 @@ def loadPlaylists():
     cur.close()
 
     return [df["Name"].values, df["Musics"].values]
+
+
+def renameMusicPlaylist(oldName, newName):
+    playlists = loadPlaylists()
+    for i, name in enumerate(playlists[0]):
+        if oldName in playlists[1][i]:
+            playlist = playlists[1][i].split(';')
+            playlist[playlist.index(oldName)] = newName
+            updatePlaylist(name, playlist)
