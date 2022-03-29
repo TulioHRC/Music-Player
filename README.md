@@ -27,6 +27,11 @@ Observation: While I was using the older version, I had some problems, like very
 
 ## LOG
 
+### 1.6.6v (Search fix)
+- Search lowercase
+- Space bind removed (better typing in search bar)
+- Playing search/playlists musics without error (sometimes happened)
+
 ### 1.6.5v (Rename fix)
 - Renaming file and in the playlists
 

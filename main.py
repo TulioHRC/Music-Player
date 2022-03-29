@@ -55,7 +55,8 @@ class MainApp:
         self.playerConstruct()
 
         # Keyboards shortcuts
-        self.master.bind("<space>", self.space) # When the space is pressed, the musics plays or pauses
+        # self.master.bind("<space>", self.space) # When the space is pressed, the musics plays or pauses
+        # Excluded because of the search bar (when space there, the music pauses or plays)
 
 
     # Menu
@@ -214,7 +215,7 @@ class MainApp:
         self.musicsWidgets = {}
         for n in range(0, len(self.musicsList)):
             if search:
-                if not search in self.musicsList[n]: # The search word isn't into the musics list
+                if not search.lower() in self.musicsList[n].lower(): # The search word isn't into the musics list
                     continue # Skips this song in the loop
             try: # Creating music widget
                 i = n+2
@@ -306,7 +307,7 @@ class MainApp:
     # Player functions
     def check(self, first=False):
         # Check if the music is playing or not (to auto advance to the next music)
-        print(audio.getTimes(self.musicFile, self.changes)[0])
+        #print(audio.getTimes(self.musicFile, self.changes)[0])
         if self.playing == 1 and audio.checkMusic() == 0:
             if not first: # Load more slow to avoid errors
                 root.after(500, self.change(1))
@@ -334,7 +335,9 @@ class MainApp:
             if self.music == path:
                 unpause = 1
             elif firstTime != 1:
-                self.musicsWidgets[f"{self.music}"].config(bg="#141414") # Re-put the background color in the played music
+                try:
+                    self.musicsWidgets[f"{self.music}"].config(bg="#141414") # Re-put the background color in the played music
+                except: pass # If window changed (to playlist without this song, ...)
 
             self.musicsWidgets[f"{path}"].config(bg="gray") # Gray background in the playing music
 
